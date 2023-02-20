@@ -4,7 +4,7 @@ const { User } = require('../db/models');
 
 const { secret, expiresIn } = jwtConfig;
 
-// sert the JWT cookie after a user logs in or signs up
+// set the JWT cookie after a user logs in or signs up
 // will expire according to .env file
 const setTokenCookie = (res, user) => {
   // Create the token.
