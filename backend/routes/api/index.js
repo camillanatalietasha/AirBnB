@@ -1,5 +1,10 @@
 const router = require('express').Router();
+const sessionRouter = require("./session.js");
+const usersRouter = require("./users.js");
 
+router.post("/test", function (req, res) {
+  res.json({ requestBody: req.body });
+});
 /*-------------------------Restore User stays here------------------------------*/
 
 // Connect restoreUser middleware to the API router
@@ -13,6 +18,9 @@ router.get("/restore-user", (req, res) => {
 });
 /*------------------------------------------------------------------------------*/
 
+router.use("/session", sessionRouter);
+
+router.use("/users", usersRouter);
 
 
 
