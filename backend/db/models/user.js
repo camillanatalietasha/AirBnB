@@ -35,8 +35,6 @@ module.exports = (sequelize, DataTypes) => {
         lastName,
         username,
         email,
-        firstName,
-        lastName,
         hashedPassword,
       });
       return await User.scope("currentUser").findByPk(user.id);
@@ -50,12 +48,14 @@ module.exports = (sequelize, DataTypes) => {
     {
       firstName: {
         type: DataTypes.STRING,
+        allowNull: false,
         validate: {
             isAlpha: true,
         },
       },
       lastName: {
         type: DataTypes.STRING,
+        allowNull: false,
         validate: {
             isAlpha: true,
         },
