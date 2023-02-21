@@ -17,26 +17,35 @@ module.exports = (sequelize, DataTypes) => {
     };
   }
   
-  Booking.init({
-    spotId: {
+  Booking.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+      spotId: {
         allowNull: false,
         type: DataTypes.INTEGER,
-    }, 
-    userId: {
+      },
+      userId: {
         allowNull: false,
         type: DataTypes.INTEGER,
-    }, 
-    startDate: {
+      },
+      startDate: {
         allowNull: false,
         type: DataTypes.DATE,
-    }, 
-    endDate: {
+      },
+      endDate: {
         allowNull: false,
-        type: DataTypes.DATE
-    }, 
-  }, {
-    sequelize,
-    modelName: 'Booking',
-  });
+        type: DataTypes.DATE,
+      },
+    },
+    {
+      sequelize,
+      modelName: "Booking",
+    }
+  );
   return Booking;
 };

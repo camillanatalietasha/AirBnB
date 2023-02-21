@@ -22,33 +22,42 @@ module.exports = (sequelize, DataTypes) => {
       });
     }
   }
-  Review.init({
-    spotId: {
+  Review.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+      spotId: {
         allowNull: false,
         type: DataTypes.INTEGER,
-        },
-    userId: {
+      },
+      userId: {
         allowNull: false,
         type: DataTypes.INTEGER,
-        },
-    review: { 
+      },
+      review: {
         allowNull: false,
         type: DataTypes.TEXT,
         validate: {
-            len: [10, 1000],
+          len: [10, 1000],
         },
-        },
-    stars: {
+      },
+      stars: {
         allowNull: false,
         type: DataTypes.INTEGER,
         validate: {
-            min: 1,
-            max: 5,
+          min: 1,
+          max: 5,
         },
-        },
-  }, {
-    sequelize,
-    modelName: 'Review',
-  });
+      },
+    },
+    {
+      sequelize,
+      modelName: "Review",
+    }
+  );
   return Review;
 };
