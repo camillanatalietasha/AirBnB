@@ -40,12 +40,20 @@ module.exports = (sequelize, DataTypes) => {
       return await User.scope("currentUser").findByPk(user.id);
     }
     static associate(models) {
+    // Users can have many spots - association
       User.hasMany(models.Spot, { 
         foreignKey: 'hostId',
         onDelete: 'CASCADE',
         hooks: true
-        })
-    }
+        });
+    // Users can have many bookings - associaton
+      User.hasMany(models.Booking, { 
+        foreignKey: 'hostId',
+        onDelete: 'CASCADE',
+        hooks: true
+        });
+      
+    };
   }
 
   User.init(

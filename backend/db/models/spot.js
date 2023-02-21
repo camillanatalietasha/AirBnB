@@ -1,4 +1,6 @@
 'use strict';
+
+
 const {
   Model
 } = require('sequelize');
@@ -10,9 +12,17 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Spot.belongsTo(models.User, { foreignKey: 'hostId' })
+      // Spots have one host/user - association
+      Spot.belongsTo(models.User, { foreignKey: "hostId" });
+      // Spots can have many bookings - association 
+      Spot.hasMany(models.Booking, {
+        foreignKey: "spotId",
+        onDelete: "CASCADE",
+        hooks: true,
+      });
     }
   }
+  
   Spot.init({
     hostId: {
         allowNull: false,
