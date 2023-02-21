@@ -10,7 +10,7 @@ if (process.env.NODE_ENV === 'production') {
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable(
-      "ReviewImages",
+      "SpotImages",
       {
         id: {
           allowNull: false,
@@ -18,14 +18,19 @@ module.exports = {
           primaryKey: true,
           type: Sequelize.INTEGER,
         },
-        reviewId: {
-            allowNull: false,
+        spotId: {
+          allowNull: false,
           type: Sequelize.INTEGER,
-          references: { model: "Reviews" },
+          references: { model: "Spots" },
         },
         imgUrl: {
           allowNull: false,
           type: Sequelize.STRING,
+        },
+        isPreview: {
+          allowNull: false,
+          type: Sequelize.BOOLEAN,
+          defaultValue: false,
         },
         createdAt: {
           allowNull: false,
@@ -42,6 +47,6 @@ module.exports = {
     );
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('ReviewImages');
+    await queryInterface.dropTable('SpotImages');
   }
 };
