@@ -14,6 +14,12 @@ module.exports = (sequelize, DataTypes) => {
       Review.belongsTo(models.User, { foreignKey: "userId" });
       // Reviews have one spot - association
       Review.belongsTo(models.Spot, { foreignKey: "spotId" });
+      // Reviews can have multiple review images
+      Review.hasMany(models.ReviewImage, {
+          foreignKey: "reviewId",
+          onDelete: "CASCADE",
+          hooks: true,
+      });
     }
   }
   Review.init({
