@@ -20,6 +20,12 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: "CASCADE",
         hooks: true,
       });
+      // Spots can have many reviews - association 
+      Spot.hasMany(models.Review, {
+        foreignKey: "spotId",
+        onDelete: "CASCADE",
+        hooks: true,
+      });
     }
   }
   
