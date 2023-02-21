@@ -70,11 +70,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     lat: {
         allowNull: false,
-        type: DataTypes.DECIMAL(3,5),
+        type: DataTypes.DECIMAL(8,5),
     },
     lng: {
         allowNull: false,
-        type: DataTypes.DECIMAL(3,5),
+        type: DataTypes.DECIMAL(8,5),
     },
     name: {
         allowNull: false,
@@ -86,9 +86,6 @@ module.exports = (sequelize, DataTypes) => {
     description: {
         allowNull: false,
         type: DataTypes.TEXT,
-        validate: {
-            len: [3,3000]
-        }
     },
     nightlyRate: {
         allowNull: false,
