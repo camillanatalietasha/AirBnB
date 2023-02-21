@@ -71,16 +71,10 @@ module.exports = (sequelize, DataTypes) => {
     lat: {
         allowNull: false,
         type: DataTypes.STRING,
-        validate: {
-            isNumeric: true,
-        },
     },
     lng: {
         allowNull: false,
         type: DataTypes.STRING,
-        validate: {
-            isNumeric: true,
-        },
     },
     name: {
         allowNull: false,
