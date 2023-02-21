@@ -1,11 +1,11 @@
-'use strict';
+"use strict";
 /** @type {import('sequelize-cli').Migration} */
 
 // options object
 let options = {};
-if (process.env.NODE_ENV === 'production') {
-    options.schema = process.env.SCHEMA;
-};
+if (process.env.NODE_ENV === "production") {
+  options.schema = process.env.SCHEMA;
+}
 
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -42,11 +42,11 @@ module.exports = {
         },
         lat: {
           allowNull: false,
-          type: Sequelize.STRING,
+          type: Sequelize.STRING(30),
         },
         lng: {
           allowNull: false,
-          type: Sequelize.STRING,
+          type: Sequelize.STRING(30),
         },
         name: {
           allowNull: false,
