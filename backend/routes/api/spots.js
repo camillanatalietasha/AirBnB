@@ -36,15 +36,14 @@ router.get("/", async (req, res, next) => {
 });
 
 // GET all Spots owned by current user
-router.get('/current', [ restoreUser, requireAuth], async (req, res) => {
+router.get('/current', requireAuth, async (req, res) => {
     // authorization is passed
     // extract user 
-    const { user } = req;
-    const userId = user.toSafeObject().id;
+    const userId = req.current.id;
 
     const pagination = paginator(req, res);
 
-  const spots = await Spot.findAll({
+    const spots = await Spot.findAll({
     where: {
         hostId: userId,
     },

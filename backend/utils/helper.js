@@ -1,6 +1,7 @@
 
 
-// pagination helper function
+/*=============================Pagination helper function=============================*/
+
 const paginator = function (req, res) {
   let { page, size } = req.query;
   let pagination = {};
@@ -16,6 +17,8 @@ const paginator = function (req, res) {
 
   return pagination;
 };
+
+/*=============================Manipulate Spots Query Object=============================*/
 
 const spotsObjectMaker = function(spots) {
     let Spots = [];
