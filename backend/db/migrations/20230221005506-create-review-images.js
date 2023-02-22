@@ -17,11 +17,12 @@ module.exports = {
           autoIncrement: true,
           primaryKey: true,
           type: Sequelize.INTEGER,
+          unique: true,
         },
         reviewId: {
             allowNull: false,
           type: Sequelize.INTEGER,
-          references: { model: "Reviews" },
+          references: { model: "Reviews", key: "id" },
         },
         imgUrl: {
           allowNull: false,

@@ -17,12 +17,13 @@ module.exports = {
           autoIncrement: true,
           primaryKey: true,
           type: Sequelize.INTEGER,
+          unique: true,
         },
         hostId: {
           allowNull: false,
           onDelete: "CASCADE",
           type: Sequelize.INTEGER,
-          references: { model: "Users" },
+          references: { model: "Users", key: "id" },
         },
         address: {
           allowNull: false,

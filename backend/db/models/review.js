@@ -27,15 +27,22 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
         primaryKey: true,
-        autoIncrement: true,
       },
       spotId: {
         allowNull: false,
         type: DataTypes.INTEGER,
+        references: {
+            model: 'Spots',
+            key: 'id'
+        }
       },
       userId: {
         allowNull: false,
         type: DataTypes.INTEGER,
+        references: {
+            model: 'Users',
+            key: 'id'
+        }
       },
       review: {
         allowNull: false,

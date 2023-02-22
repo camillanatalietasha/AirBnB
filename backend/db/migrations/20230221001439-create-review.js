@@ -17,16 +17,17 @@ module.exports = {
           autoIncrement: true,
           primaryKey: true,
           type: Sequelize.INTEGER,
+          unique: true,
         },
         spotId: {
           allowNull: false,
           type: Sequelize.INTEGER,
-          references: { model: "Spots" },
+          references: { model: "Spots", key: "id" },
         },
         userId: {
           allowNull: false,
           type: Sequelize.INTEGER,
-          references: { model: "Users" },
+          references: { model: "Users", key: "id" },
         },
         review: {
           allowNull: false,

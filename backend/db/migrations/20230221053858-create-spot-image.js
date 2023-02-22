@@ -17,11 +17,12 @@ module.exports = {
           autoIncrement: true,
           primaryKey: true,
           type: Sequelize.INTEGER,
+          unique: true,
         },
         spotId: {
           allowNull: false,
           type: Sequelize.INTEGER,
-          references: { model: "Spots" },
+          references: { model: "Spots", key: "id" },
         },
         imgUrl: {
           allowNull: false,
