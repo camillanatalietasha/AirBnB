@@ -39,7 +39,7 @@ router.get("/", async (req, res, next) => {
 router.get('/current', requireAuth, async (req, res) => {
     // authorization is passed
     // extract user 
-    const userId = req.current.id;
+    const userId = req.user.id;
 
     const pagination = paginator(req, res);
 
