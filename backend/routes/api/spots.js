@@ -77,6 +77,29 @@ router.get("/:spotId", async (req, res) => {
     .then(s => { allSpotDetails.avgStarRating = s / allSpotDetails.numReviews });
   await SpotImage.findAll({where: { spotId: spotId }})
     .then(i => {allSpotDetails.SpotImages = i});
+  let owner = await Spot.findByPk(spotId, {
+    raw: true,
+    attributes: [],
+    include: [{
+      model: User,
+      as: "Owner",
+    }],
+  })
+  
+//   .then((o) => {
+//     allSpotDetails.Owner = o;
+//   });
+  allSpotDetails.Owner = owner;
+
+//   const owner = await Spot.findByPk(spotId, 
+//   {
+//     attributes: [],
+//     include: [
+//         {
+//             model: User,
+//         },
+//     ],
+//   }).then(o => { allSpotDetails.Owner = o});
 
   res.status(200).json(allSpotDetails);
 });
