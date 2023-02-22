@@ -45,21 +45,18 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'hostId',
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
-        hooks: true
         });
     // Users can have many bookings - associaton
       User.hasMany(models.Booking, { 
         foreignKey: 'userId',
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
-        hooks: true
         });
     // Users can have many reviews - associaton
       User.hasMany(models.Review, { 
         foreignKey: 'userId',
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
-        hooks: true
         });
       
     };

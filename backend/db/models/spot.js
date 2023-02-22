@@ -12,28 +12,21 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // Spots have one host/user - association
       Spot.belongsTo(models.User, { foreignKey: "hostId" });
-      // Spots can have many bookings - association 
       Spot.hasMany(models.Booking, {
         foreignKey: "spotId",
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
-        hooks: true,
       });
-      // Spots can have many reviews - association 
       Spot.hasMany(models.Review, {
         foreignKey: "spotId",
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
-        hooks: true,
       });
-      // Spots can have many spot images - association 
       Spot.hasMany(models.SpotImage, {
         foreignKey: "spotId",
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
-        hooks: true,
       });
     }
   }
