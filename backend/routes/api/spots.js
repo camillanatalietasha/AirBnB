@@ -4,7 +4,7 @@ const { setTokenCookie, requireAuth, restoreUser } = require("../../utils/auth")
 const { User, Spot, Review, SpotImage } = require("../../db/models");
 const { check } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
-const { paginator, spotsObjectMaker } = require("../../utils/helper");
+const { paginator, spotsListMaker } = require("../../utils/helper");
 const router = express.Router();
 const { sequelize, Op } = require("sequelize");
 
@@ -30,7 +30,7 @@ router.get("/", async (req, res, next) => {
     ...pagination,
   });
 
-  const Spots = spotsObjectMaker(spots);
+  const Spots = spotsListMaker(spots);
 
   res.status(200).json({ Spots });
 });
@@ -58,7 +58,7 @@ router.get('/current', requireAuth, async (req, res) => {
     ...pagination,
   });
 
-  const Spots = spotsObjectMaker(spots);
+  const Spots = spotsListMaker(spots);
 
   res.status(200).json({ Spots });
 })

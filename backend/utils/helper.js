@@ -18,9 +18,10 @@ const paginator = function (req, res) {
   return pagination;
 };
 
-/*=============================Manipulate Spots Query Object=============================*/
+/*=============================Manipulate Spots Queries Objects=============================*/
 
-const spotsObjectMaker = function(spots) {
+// list of several spots
+const spotsListMaker = function(spots) {
     let Spots = [];
     // iterate to turn results to JSON object
     spots.forEach((spot) => {
@@ -54,4 +55,7 @@ const spotsObjectMaker = function(spots) {
     return Spots;
 }
 
-module.exports = { paginator, spotsObjectMaker }
+// spot details object
+
+
+module.exports = { paginator, spotsListMaker }
