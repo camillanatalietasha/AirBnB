@@ -1,7 +1,7 @@
-const express = require('express');
+const express = require("express");
 
-const { setTokenCookie, requireAuth } = require("../../utils/auth"); 
-const { User, Spot } = require("../../db/models");
+const { setTokenCookie, requireAuth } = require("../../utils/auth");
+const { User, Spot, Review, SpotImage } = require("../../db/models");
 const { check } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
 const router = express.Router();
@@ -9,26 +9,66 @@ const { sequelize, Op } = require("sequelize");
 
 /*============================================================================*/
 
-router.get('/', async (req, res, next) => {
-    let { page, size } = req.query
-    let pagination = {};
+// GET all spots
+router.get("/", async (req, res, next) => {
+  let { page, size } = req.query;
+  let pagination = {};
 
-    // set default pagination if not specified in query
-    size = (!size || parseInt(size) <= 0 ? size = 1 : size = parseInt(size)); 
-    page = (!page || parseInt(page) <= 0 ? page = 1 : page = parseInt(page));
+  // set default pagination if not specified in query
+  size = !size || parseInt(size) <= 0 ? (size = 3) : (size = parseInt(size));
+  page = !page || parseInt(page) <= 0 ? (page = 1) : (page = parseInt(page));
 
-    if (page >= 1 && size >= 1) {
-        pagination.limit = size;
-        pagination.offset = size * (page - 1);
-    };
+  if (page >= 1 && size >= 1) {
+    pagination.limit = size;
+    pagination.offset = size * (page - 1);
+  }
 
-     const spots = await Spot.findAll({
-        ...pagination
-     });
+  // include all table table in query
+  // manipulate object to show aggregate spot rating and preview photo
+  const spots = await Spot.findAll({
+    include: [
+      {
+        model: Review,
+      },
+      {
+        model: SpotImage,
+      },
+    ],
+    ...pagination,
+  });
 
-     res.status(200).json(spots); 
+  let Spots = [];
+  // iterate to turn results to JSON object
+  spots.forEach((spot) => {
+    Spots.push(spot.toJSON());
+  });
+
+  // nested loop to extract all star ratings then calculate average and add a key 'avgRating' to the current spot
+  Spots.forEach((spot) => {
+    let total = 0;
+    let stars = 0;
+    spot.Reviews.forEach((review) => {
+      total += review.stars;
+      stars += 1;
+    });
+    let avg = total / stars;
+    spot.avgRating = Math.round(avg * 10) / 10;
+    // delete the unneeded Reivews object from each spot
+    delete spot.Reviews;
+  });
+
+  // nested loop to extract the previewImage for each spot
+  Spots.forEach((spot) => {
+    spot.SpotImages.forEach((img) => {
+      if (img.isPreview === true) {
+        spot.previewImage = img.imgUrl;
+      }
+    });
+    // delete the unneeded Reivews object from each spot
+    delete spot.SpotImages;
+  });
+
+  res.status(200).json({ Spots });
 });
-
-
 
 module.exports = router;
