@@ -1,7 +1,7 @@
 const express = require("express");
 
 const { setTokenCookie, requireAuth, restoreUser } = require("../../utils/auth");
-const { User, Spot, Review, SpotImage } = require("../../db/models");
+const { User, Spot, Review, SpotImage, Sequelize } = require("../../db/models");
 const { check } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
 const { paginator, spotsListMaker } = require("../../utils/helper");
@@ -65,7 +65,11 @@ router.get('/current', requireAuth, async (req, res) => {
 
 router.get("/:spotId", async (req, res) => {
   // extract spotId from params
-  const spotId = req.params.spotId;
+  const spotId = parseInt(req.params.spotId);
+
+  
+
+
   // retrieve spot details and convert to JSON object
   const getSpot = await Spot.findByPk(spotId);
   const allSpotDetails = getSpot.toJSON();
@@ -78,28 +82,16 @@ router.get("/:spotId", async (req, res) => {
   await SpotImage.findAll({where: { spotId: spotId }})
     .then(i => {allSpotDetails.SpotImages = i});
   let owner = await Spot.findByPk(spotId, {
-    raw: true,
-    attributes: [],
+    raw: true, // flattens the include object so is inline 
+    attributes: ['Owner.id', 'Owner.firstName', 'Owner.lastName'],
     include: [{
       model: User,
       as: "Owner",
+      attributes: [],
     }],
   })
-  
-//   .then((o) => {
-//     allSpotDetails.Owner = o;
-//   });
-  allSpotDetails.Owner = owner;
 
-//   const owner = await Spot.findByPk(spotId, 
-//   {
-//     attributes: [],
-//     include: [
-//         {
-//             model: User,
-//         },
-//     ],
-//   }).then(o => { allSpotDetails.Owner = o});
+  allSpotDetails.Owner = owner;
 
   res.status(200).json(allSpotDetails);
 });
