@@ -27,7 +27,7 @@ module.exports = {
         },
         address: {
           allowNull: false,
-          type: Sequelize.STRING(30),
+          type: Sequelize.STRING(50),
         },
         city: {
           allowNull: false,
@@ -43,11 +43,11 @@ module.exports = {
         },
         lat: {
           allowNull: false,
-          type: Sequelize.STRING(30),
+          type: Sequelize.DECIMAL,
         },
         lng: {
           allowNull: false,
-          type: Sequelize.STRING(30),
+          type: Sequelize.DECIMAL,
         },
         name: {
           allowNull: false,
@@ -57,11 +57,8 @@ module.exports = {
           allowNull: false,
           type: Sequelize.TEXT,
         },
-        nightlyRate: {
+        price: {
           allowNull: false,
-          type: Sequelize.INTEGER,
-        },
-        cleaningFee: {
           type: Sequelize.INTEGER,
         },
         createdAt: {

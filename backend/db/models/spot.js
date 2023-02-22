@@ -44,46 +44,66 @@ module.exports = (sequelize, DataTypes) => {
             model: 'Users',
             key: 'id'
         }
-
     },
     address: {
         allowNull: false,
         type: DataTypes.STRING,
+        validate: {
+            len: [2,50]
+        }
     },
     city: {
         allowNull: false,
         type: DataTypes.STRING,
+        validate: {
+            len: [2,30]
+        }
     },
     state: {
         allowNull: false,
         type: DataTypes.STRING,
+        validate: {
+            len: [2,30]
+        }
     },
     country: {
         allowNull: false,
         type: DataTypes.STRING,
+        validate: {
+            len: [2,30]
+        }
     },
     lat: {
         allowNull: false,
-        type: DataTypes.STRING,
+        type: DataTypes.DECIMAL,
+        validate: {
+            isDecimal: true,
+        },
     },
     lng: {
         allowNull: false,
-        type: DataTypes.STRING,
+        type: DataTypes.DECIMAL,
     },
     name: {
         allowNull: false,
         type: DataTypes.STRING,
+        validate: {
+            len: [2,50]
+        }
     },
     description: {
         allowNull: false,
         type: DataTypes.TEXT,
+        validate: {
+            len: [2,5000]
+        }
     },
-    nightlyRate: {
+    price: {
         allowNull: false,
         type: DataTypes.INTEGER,
-    },
-    cleaningFee: {
-    type: DataTypes.INTEGER
+        validate: {
+            min: 1,
+        },
     },
   }, {
     sequelize,
