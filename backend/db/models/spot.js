@@ -31,83 +31,87 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   
-  Spot.init({
-    id: {
+  Spot.init(
+    {
+      id: {
         type: DataTypes.INTEGER,
         allowNull: false,
         primaryKey: true,
-    },
-    hostId: {
+        autoIncrement: true,
+      },
+      hostId: {
         allowNull: false,
         type: DataTypes.INTEGER,
         references: {
-            model: 'Users',
-            key: 'id'
-        }
-    },
-    address: {
-        allowNull: false,
-        type: DataTypes.STRING,
-        validate: {
-            len: [2,50]
-        }
-    },
-    city: {
-        allowNull: false,
-        type: DataTypes.STRING,
-        validate: {
-            len: [2,30]
-        }
-    },
-    state: {
-        allowNull: false,
-        type: DataTypes.STRING,
-        validate: {
-            len: [2,30]
-        }
-    },
-    country: {
-        allowNull: false,
-        type: DataTypes.STRING,
-        validate: {
-            len: [2,30]
-        }
-    },
-    lat: {
-        allowNull: false,
-        type: DataTypes.DECIMAL,
-        validate: {
-            isDecimal: true,
+          model: "Users",
+          key: "id",
         },
-    },
-    lng: {
-        allowNull: false,
-        type: DataTypes.DECIMAL,
-    },
-    name: {
+      },
+      address: {
         allowNull: false,
         type: DataTypes.STRING,
         validate: {
-            len: [2,50]
-        }
-    },
-    description: {
+          len: [2, 50],
+        },
+      },
+      city: {
+        allowNull: false,
+        type: DataTypes.STRING,
+        validate: {
+          len: [2, 30],
+        },
+      },
+      state: {
+        allowNull: false,
+        type: DataTypes.STRING,
+        validate: {
+          len: [2, 30],
+        },
+      },
+      country: {
+        allowNull: false,
+        type: DataTypes.STRING,
+        validate: {
+          len: [2, 30],
+        },
+      },
+      lat: {
+        allowNull: false,
+        type: DataTypes.DECIMAL,
+        validate: {
+          isDecimal: true,
+        },
+      },
+      lng: {
+        allowNull: false,
+        type: DataTypes.DECIMAL,
+      },
+      name: {
+        allowNull: false,
+        type: DataTypes.STRING,
+        validate: {
+          len: [2, 50],
+        },
+      },
+      description: {
         allowNull: false,
         type: DataTypes.TEXT,
         validate: {
-            len: [2,5000]
-        }
-    },
-    price: {
+          len: [2, 5000],
+        },
+      },
+      price: {
         allowNull: false,
         type: DataTypes.INTEGER,
         validate: {
-            min: 1,
+          min: 1,
         },
+      },
     },
-  }, {
-    sequelize,
-    modelName: 'Spot',
-  });
+    {
+      sequelize,
+      modelName: "Spot",
+    }
+  );
   return Spot;
 };

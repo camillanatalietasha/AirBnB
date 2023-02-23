@@ -3,14 +3,15 @@ const express = require("express");
 const { setTokenCookie, requireAuth, restoreUser } = require("../../utils/auth");
 const { User, Spot, Review, SpotImage, Sequelize } = require("../../db/models");
 const { check } = require("express-validator");
-const { handleValidationErrors } = require("../../utils/validation");
+const { handleValidationErrors, handleSpotValidation } = require("../../utils/validation");
 const { paginator, spotsListMaker } = require("../../utils/helper");
 const router = express.Router();
 const { sequelize, Op } = require("sequelize");
 
-/*=================================================================*/
+/*================================== middleware ===============================*/
 
 
+/*================================= routes ================================*/
 // GET all spots
 router.get("/", async (req, res, next) => {
 
@@ -67,13 +68,18 @@ router.get("/:spotId", async (req, res) => {
   // extract spotId from params
   const spotId = parseInt(req.params.spotId);
 
-  
-
-
   // retrieve spot details and convert to JSON object
   const getSpot = await Spot.findByPk(spotId);
+  // throw error if spot not found
+  if(!getSpot) {
+    res.status(404);
+    return res.json({
+        message: "Spot couldn't be found",
+        statusCode: 404,
+    })
+  };
+  
   const allSpotDetails = getSpot.toJSON();
-
   // get and set key for num reviews  
   await Review.count({ where: { "spotId": spotId}})
     .then(c => { allSpotDetails.numReviews = c });
@@ -97,6 +103,115 @@ router.get("/:spotId", async (req, res) => {
 });
 
 
+// REFACTOR - find way to check these directly (or equally) to model validations
+
+const validateNewSpot = [
+  check("address")
+    .exists({ checkFalsy: true })
+    .withMessage("Street address is required"),
+  check("city")
+    .exists({ checkFalsy: true })
+    .withMessage("City is required"),
+  check("state")
+    .exists({ checkFalsy: true })
+    .withMessage("State is required"),
+  check("country")
+    .exists({ checkFalsy: true })
+    .withMessage("Country is required"),
+  check("lat")
+    .isDecimal()
+    .withMessage("Latitude is not valid"),
+  check("lng")
+    .isDecimal()
+    .withMessage("Longitude is not valid"),
+  check("name")
+    .exists({ checkFalsy: true })
+    .withMessage("Name must be less than 50 characters"),
+  check("description")
+    .exists({ checkFalsy: true })
+    .withMessage("Description is required"),
+  check("price")
+    .isInt()
+    .withMessage("Price per day is required"),
+    handleSpotValidation
+];
+
+// REFACTOR make a helper func for finding spotID and throwing error if does not exist 
+
+// POST a new spot
+router.post('/', [requireAuth, validateNewSpot], async (req, res) => {
+  const { address, city, state, country, lat, lng, name, description, price } = req.body;
+  const hostId = req.user.id;
+
+  const newSpot = await Spot.create({
+    hostId, address, city, state, country, lat, lng, name, description, price
+  });
+
+  res.status(201).json(newSpot);
+})
+
+// POST new image for spot based on spotId
+router.post('/:spotId/images', requireAuth, async (req, res) => {
+  const { url, preview } = req.body;
+  const spot = await Spot.findByPk(req.params.spotId);
+
+  // throw error if spot does not exist
+  if (!spot) {
+    return res.status(404).json({
+      message: "Spot couldn't be found",
+      statusCode: 404
+    })
+  };
+
+  // create new instance of SpotImage
+  const newSpotImage = await SpotImage.create({ 
+      spotId: spot.id,
+      imgUrl: url,
+      isPreview: preview
+  });
+
+  res.status(200);
+  res.json({
+    id: newSpotImage.id,
+    url: newSpotImage.imgUrl,
+    preview: newSpotImage.isPreview 
+  })
+})
+
+// PUT a spot
+router.put('/:spotId',[requireAuth, validateNewSpot], async (req, res) => {
+  const { address, city, state, country, lat, lng, name, description, price } = req.body;
+  const spotId = req.params.id;
+  const spot = await Spot.findByPk(req.params.spotId);
+
+  // throw error if spot does not exist
+  if (!spot) {
+    return res.status(404).json({
+      message: "Spot couldn't be found",
+      statusCode: 404
+    })
+  };
+  
+  const udpatedSpot = await Spot.update({
+    address,
+    city,
+    state,
+    country,
+    lat,
+    lng,
+    name,
+    description,
+    price,
+  },
+  {
+    where: { id: spotId },
+  }
+  );
+
+  res.status(200).json(udpatedSpot);
+
+  
+});
 
 // -------------------> saving for refactoring
 // router.get("/:spotId", async (req, res) => {
@@ -127,10 +242,7 @@ router.get("/:spotId", async (req, res) => {
 //   allSpotDetails.avgStarRating = allSpotDetails.avgStarRating / allSpotDetails.numReviews;
 //   delete allSpotDetails.Reviews;
 
-
-
 //   res.status(200).json({allSpotDetails});
 // });
-
 
 module.exports = router;
