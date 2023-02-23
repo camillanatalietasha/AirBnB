@@ -1,6 +1,6 @@
 const express = require("express");
 
-const { requireAuth } = require("../../utils/auth");
+const { requireAuth, restoreUser } = require("../../utils/auth");
 const { User, Spot, Review, SpotImage, Sequelize } = require("../../db/models");
 const { check } = require("express-validator");
 const { handleSpotValidation } = require("../../utils/validation");
@@ -36,10 +36,10 @@ router.get("/", async (req, res, next) => {
 });
 
 // GET all Spots owned by current user
-router.get('/current', requireAuth, async (req, res) => {
+router.get('/current', [requireAuth, restoreUser ], async (req, res) => {
     // authorization is passed
     // extract user 
-    const userId = req.current.id;
+    const userId = req.user.id;
 
     const pagination = paginator(req, res);
 
@@ -138,7 +138,7 @@ const validateNewSpot = [
 // REFACTOR make a helper func for finding spotID and throwing error if does not exist 
 
 // POST a new spot
-router.post('/', [requireAuth, validateNewSpot], async (req, res) => {
+router.post('/', [requireAuth, restoreUser, validateNewSpot], async (req, res) => {
   const { address, city, state, country, lat, lng, name, description, price } = req.body;
   const hostId = req.user.id;
 
@@ -213,7 +213,7 @@ router.put('/:spotId',[requireAuth, validateNewSpot], async (req, res) => {
 });
 
 // delete a spot
-router.delete('/:spotId', requireAuth, async (req, res) => {
+router.delete('/:spotId', [requireAuth, restoreUser], async (req, res) => {
   let spot = await Spot.findByPk(req.params.id);
 
   if (!spot) {
