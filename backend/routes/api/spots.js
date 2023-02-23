@@ -1,14 +1,13 @@
 const express = require("express");
 
-const { setTokenCookie, requireAuth, restoreUser } = require("../../utils/auth");
+const { requireAuth } = require("../../utils/auth");
 const { User, Spot, Review, SpotImage, Sequelize } = require("../../db/models");
 const { check } = require("express-validator");
-const { handleValidationErrors, handleSpotValidation } = require("../../utils/validation");
+const { handleSpotValidation } = require("../../utils/validation");
 const { paginator, spotsListMaker } = require("../../utils/helper");
 const router = express.Router();
 const { sequelize, Op } = require("sequelize");
 
-/*================================== middleware ===============================*/
 
 
 /*================================= routes ================================*/
