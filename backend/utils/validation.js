@@ -1,6 +1,6 @@
 // express-validator dependency -> validate user input from req bodies
 
-const { validationResult } = require("express-validator");
+const { validationResult, handleSpotValidation, checkReviewSchema } = require("express-validator");
 // middleware for formatting errors from express-validator middleware
 // (to customize, see express-validator's documentation)
 // // original
@@ -40,8 +40,26 @@ const handleSpotValidation = (req, _res, next) => {
   next();
 };
 
+const checkReviewSchema = {
+  review: {
+    isLength: {
+      errorMessage: "Review text is required",
+      options: { min: 5 },
+    },
+  },
+  stars: {
+    isInt: {
+      errorMessage: "Stars must be an integer from 1 to 5",
+      toInt: true,
+      options: [{ gt: 1, lt: 5 }],
+    },
+  },
+};
+
+
 
 module.exports = {
   handleValidationErrors,
-  handleSpotValidation
+  handleSpotValidation,
+  checkReviewSchema
 };

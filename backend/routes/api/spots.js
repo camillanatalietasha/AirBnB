@@ -1,9 +1,9 @@
 const express = require("express");
 
 const { requireAuth, restoreUser } = require("../../utils/auth");
-const { User, Spot, Review, SpotImage, Sequelize } = require("../../db/models");
+const { User, Spot, Review, ReviewImage, SpotImage, Sequelize } = require("../../db/models");
 const { check } = require("express-validator");
-const { handleSpotValidation } = require("../../utils/validation");
+const { handleSpotValidation, checkReviewSchema } = require("../../utils/validation");
 const { paginator, spotsListMaker } = require("../../utils/helper");
 const router = express.Router();
 const { sequelize, Op } = require("sequelize");
@@ -36,7 +36,7 @@ router.get("/", async (req, res, next) => {
 });
 
 // GET all Spots owned by current user
-router.get('/current', [requireAuth, restoreUser ], async (req, res) => {
+router.get('/current', [requireAuth, restoreUser], async (req, res) => {
     // authorization is passed
     // extract user 
     const userId = req.user.id;
@@ -61,7 +61,41 @@ router.get('/current', [requireAuth, restoreUser ], async (req, res) => {
   const Spots = spotsListMaker(spots);
 
   res.status(200).json({ Spots });
-})
+});
+
+// get all reviews by spotid
+router.get("/:spotId/reviews", async (req, res) => {
+  const spotId = req.params.spotId;
+  const spot = await Spot.findByPk(spotId);
+
+  if(!spot) {
+    res.status(404);
+    res.json({
+      message: "Spot couldn't be found",
+      statusCode: 404
+    })
+  };
+  
+
+  const spotReviews = await Review.findAll({
+    where: {
+      spotId: spotId,
+    },
+    include: [
+      {
+        model: User,
+        attributes: ["id", "firstName", "lastName"],
+      },
+      {
+        model: ReviewImage,
+        attributes: ["id", "imgUrl"],
+      },
+    ],
+  });
+
+  res.status(200).json(spotReviews);
+});
+
 
 router.get("/:spotId", async (req, res) => {
   // extract spotId from params
@@ -100,6 +134,53 @@ router.get("/:spotId", async (req, res) => {
 
   res.status(200).json(allSpotDetails);
 });
+
+
+
+// post a new review for a spot based on spotId
+router.post("/:spotId/reviews", [validateReviews, requireAuth, restoreUser], async(req, res) => {
+  // check if spot exists
+  const spotId = req.params.spotId;
+  const spot = await Spot.findByPk(spotId);
+
+  if (!spot) {
+    res.status(404);
+    res.json({
+      message: "Spot couldn't be found",
+      statusCode: 404,
+    });
+  };
+
+  // check if current user already has a review for this spot
+  const userId = req.user.id;
+  const userReviews = Review.findAll({
+    where: {
+      [Op.and]: 
+        [{ userId: userId }, { spotId: spotId }],
+    },
+  });
+
+  if (userReviews.length) {
+    res.status(403);
+    res.json({
+      message: "User already has a review for this spot",
+      statusCode: 403
+    })
+  };
+
+  // create new review
+  const { review, stars } = req.body;
+  const newReview = await Review.create({
+    userId,
+    spotId,
+    review,
+    stars,
+  });
+
+  res.json(newReview);
+
+})
+
 
 
 // REFACTOR - find way to check these directly (or equally) to model validations
@@ -175,7 +256,7 @@ router.post('/:spotId/images', requireAuth, async (req, res) => {
     url: newSpotImage.imgUrl,
     preview: newSpotImage.isPreview 
   })
-})
+});
 
 // PUT a spot
 router.put('/:spotId',[requireAuth, validateNewSpot], async (req, res) => {

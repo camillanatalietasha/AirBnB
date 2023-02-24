@@ -10,10 +10,12 @@ const { sequelize, Op } = require("sequelize");
 
 /*================================== routes ===============================*/
 
+// get reviews of current user
 router.get('/current', [requireAuth, restoreUser ], async (req, res) => {
   const userId = req.user.id;
+  
 
-  const pagination = paginator(req, res);
+  // const pagination = paginator(req, res); don't need
 
   const userReviews = await Review.findAll({
     where: {
@@ -31,6 +33,9 @@ router.get('/current', [requireAuth, restoreUser ], async (req, res) => {
     ]
   });
   res.json(userReviews)
-})
+});
+
+// get all reviews by spot id - i put this in spots router
+
 
 module.exports = router;
