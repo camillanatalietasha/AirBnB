@@ -3,7 +3,7 @@ const express = require("express");
 const { requireAuth, restoreUser } = require("../../utils/auth");
 const { User, Spot, Review, ReviewImage, SpotImage, Sequelize } = require("../../db/models");
 const { check } = require("express-validator");
-const { handleSpotValidation, checkReviewSchema } = require("../../utils/validation");
+const { handleSpotValidation } = require("../../utils/validation");
 const { paginator, spotsListMaker } = require("../../utils/helper");
 const router = express.Router();
 const { sequelize, Op } = require("sequelize");
@@ -136,9 +136,23 @@ router.get("/:spotId", async (req, res) => {
 });
 
 
+// custom validator for review schema check
+const isValidNum = val => {
+  let num = +val
+}
 
+// check review schema
+const validateReview = [
+  check("review")
+    .exists({ checkFalsy: true })
+    .withMessage("Review text is required"),
+  check("stars")
+    .isInt({ min: 1, max: 5 })
+    .withMessage("Stars must be an integer from 1 to 5"),
+  handleSpotValidation,
+];
 // post a new review for a spot based on spotId
-router.post("/:spotId/reviews", [validateReviews, requireAuth, restoreUser], async(req, res) => {
+router.post("/:spotId/reviews", [ validateReview, requireAuth, restoreUser], async(req, res) => {
   // check if spot exists
   const spotId = req.params.spotId;
   const spot = await Spot.findByPk(spotId);
@@ -171,14 +185,13 @@ router.post("/:spotId/reviews", [validateReviews, requireAuth, restoreUser], asy
   // create new review
   const { review, stars } = req.body;
   const newReview = await Review.create({
-    userId,
     spotId,
+    userId,
     review,
     stars,
   });
 
   res.json(newReview);
-
 })
 
 

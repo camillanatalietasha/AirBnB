@@ -13,7 +13,7 @@ const { sequelize, Op } = require("sequelize");
 // get reviews of current user
 router.get('/current', [requireAuth, restoreUser ], async (req, res) => {
   const userId = req.user.id;
-  
+
 
   // const pagination = paginator(req, res); don't need
 
@@ -36,6 +36,29 @@ router.get('/current', [requireAuth, restoreUser ], async (req, res) => {
 });
 
 // get all reviews by spot id - i put this in spots router
+// add review based on spot id - i put this in spots router
+
+
+
+
+// delete a reivew
+router.delete('/:reviewId', [requireAuth, restoreUser], async (req, res) => {
+  let review = await Review.findByPk(req.params.id);
+
+  if (!review) {
+    return res.status(404).json({
+      message: "Review couldn't be found",
+      statusCode: 404,
+    });
+  };
+
+  await review.destroy();
+  res.staus(200).json({
+    message: 'Successfully deleted',
+    statusCode: 200
+  });
+
+});
 
 
 module.exports = router;
