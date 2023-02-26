@@ -1,12 +1,13 @@
 const express = require("express");
 
 const { requireAuth, restoreUser } = require("../../utils/auth");
-const { User, Spot, Review, ReviewImage, SpotImage, Sequelize } = require("../../db/models");
+const { User, Spot, Review, ReviewImage, SpotImage, Booking, Sequelize } = require("../../db/models");
 const { check } = require("express-validator");
 const { handleSpotValidation } = require("../../utils/validation");
 const { paginator, spotsListMaker } = require("../../utils/helper");
 const router = express.Router();
 const { sequelize, Op } = require("sequelize");
+const { all } = require("./reviews");
 
 
 
@@ -61,6 +62,56 @@ router.get('/current', [requireAuth, restoreUser], async (req, res) => {
   const Spots = spotsListMaker(spots);
 
   res.status(200).json({ Spots });
+});
+
+// REFACTOR not in corrent order
+// get all bookings based on spotid
+router.get("/:spotId/bookings", [requireAuth, restoreUser], async (req, res) => {
+  const user = await User.findByPk(req.user.id);
+  const spot = await Spot.findByPk(req.params.spotId);
+
+  // error if the spot does not exist
+  if(!spot) {
+    res.status(404).json({
+      message: "Spot couldn't be found",
+      statusCode: 404,
+    });
+  };
+
+// view all details if current user is owner of spot
+ if (spot.hostId === user.id) {
+
+  const spotBookings = await Booking.findAll({
+    where: {
+      spotId: spot.id,
+    },
+    include: [
+      {
+        model: User,
+        attributes: ['id', 'firstName', 'lastName']
+      }
+    ]
+  });
+
+  let allBookingDetails = [];
+  // iterate to turn to JSON
+  spotBookings.forEach(info => {
+    allBookingDetails.push(info.toJSON());
+  });
+
+
+    res.status(200).json({Bookings: allBookingDetails});
+ };
+
+// get basic details if user is the booker
+  const viewBooking = await Booking.findAll({
+    where: {
+      spotId : spot.id
+    },
+    attributes: ['spotId', 'startDate', 'endDate'],
+  })
+
+  res.status(200).json({Bookings: viewBooking});
 });
 
 // get all reviews by spotid
@@ -228,6 +279,8 @@ const validateNewSpot = [
     .withMessage("Price per day is required"),
     handleSpotValidation
 ];
+
+// POST new booking based on spotId
 
 // REFACTOR make a helper func for finding spotID and throwing error if does not exist 
 

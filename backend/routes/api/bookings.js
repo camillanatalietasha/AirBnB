@@ -10,6 +10,8 @@ const { sequelize, Op } = require("sequelize");
 
 /*================================== routes ===============================*/
 
+
+// REFACTOR - getting correct booking information back, but not getting 'Spots' to appear in the requested order 
 router.get('/current', [requireAuth, restoreUser], async (req, res) => {
   const userId = req.user.id;
   
@@ -24,10 +26,9 @@ router.get('/current', [requireAuth, restoreUser], async (req, res) => {
     ]
   });
 
-  userBookings = userBookings.toJSON();
+  // const userBookingsDetails = userBookings.toJSON()  --> throwing an error not sure why?
 
-  res.status(200).json(userBookings);
-
+  res.status(200).json({Bookings: userBookings});
 
 })
 
