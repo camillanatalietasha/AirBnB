@@ -49,7 +49,7 @@ module.exports = {
         {
           spotId: 3,
           imgUrl: "assets/spot-images/spot3-nyc-extra2.png",
-          isPreview: true,
+          isPreview: false,
         },
       ],
       {}

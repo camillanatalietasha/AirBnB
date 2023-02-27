@@ -7,7 +7,7 @@ const { handleSpotValidation } = require("../../utils/validation");
 const { paginator, spotsListMaker } = require("../../utils/helper");
 const router = express.Router();
 const { sequelize, Op } = require("sequelize");
-const { all } = require("./reviews");
+// const { all } = require("./reviews");
 
 
 
@@ -42,7 +42,7 @@ router.get('/current', [requireAuth, restoreUser], async (req, res) => {
     // extract user 
     const userId = req.user.id;
 
-    const pagination = paginator(req, res);
+    // const pagination = paginator(req, res);
 
     const spots = await Spot.findAll({
     where: {
@@ -56,7 +56,7 @@ router.get('/current', [requireAuth, restoreUser], async (req, res) => {
         model: SpotImage,
       },
     ],
-    ...pagination,
+    // ...pagination,
   });
 
   const Spots = spotsListMaker(spots);
@@ -372,7 +372,6 @@ router.post('/:spotId/bookings', [requireAuth, restoreUser], async(req, res) => 
       d = d.toISOString().slice(0,10);
       checkRange.push(d);
     })
-    console.log("CHECK HERE", startDate)
 
     if(checkRange.includes(startDate)) {
       errors.startDate = "Start date conflicts with an existing booking";
