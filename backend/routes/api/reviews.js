@@ -85,14 +85,14 @@ router.post('/:reviewId/images', [requireAuth, restoreUser], async (req, res) =>
   const userId = req.user.id;
 
   let review = await Review.findByPk(id, {
-    attributes: {
-      include: [
+    attributes: [
+      
         [
           Sequelize.fn("COUNT", Sequelize.col("ReviewImages.id")),
           "ReviewImagesCount",
         ],
-      ],
-    },
+    
+    ],
     include: [
       {
         model: ReviewImage,
