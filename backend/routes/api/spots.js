@@ -72,7 +72,7 @@ router.get("/:spotId/bookings", [requireAuth, restoreUser], async (req, res) => 
 
   // error if the spot does not exist
   if(!spot) {
-    res.status(404).json({
+    return res.status(404).json({
       message: "Spot couldn't be found",
       statusCode: 404,
     });
@@ -100,7 +100,7 @@ router.get("/:spotId/bookings", [requireAuth, restoreUser], async (req, res) => 
   });
 
 
-    res.status(200).json({Bookings: allBookingDetails});
+   return res.status(200).json({Bookings: allBookingDetails});
  };
 
 // get basic details if user is the booker
@@ -121,7 +121,7 @@ router.get("/:spotId/reviews", async (req, res) => {
 
   if(!spot) {
     res.status(404);
-    res.json({
+    return res.json({
       message: "Spot couldn't be found",
       statusCode: 404
     })
@@ -280,7 +280,131 @@ const validateNewSpot = [
     handleSpotValidation
 ];
 
+
+// const validateBooking = [
+//   check("startDate")
+//     .toDate()
+//     .custom((end, { req }) => {
+//       if(end.getTime() < req.body.startDate.getTime()) {
+//         return false;
+//       }
+//       return true;
+//     }),
+//   check("endDate")
+//     .toDate()
+//     .custom((end, { req }) => {
+//       if(end.getTime() < req.body.startDate.getTime()) {
+//         return false;
+//       }
+//       return true;
+//     })
+//     .withMessage("endDate cannot be on or before startDate")
+// ]
+
+// REFACTOR - messy, reduntant and ugly but holy moly it seems to be working 
 // POST new booking based on spotId
+router.post('/:spotId/bookings', [requireAuth, restoreUser], async(req, res) => {
+  const spot = await Spot.findByPk(req.params.spotId);
+  const currentUser = req.user;
+
+  if(!spot) {
+    res.status(404);
+    res.json({
+      message: "Spot couldn't be found",
+      statusCode: 404
+    });
+  };
+
+  if(spot.hostId === currentUser.id) {
+    res.status(400);
+    res.json({
+      message: "You can't book your own spot",
+      statusCode: 400
+    }); 
+  };
+
+  const { startDate, endDate } = req.body;
+
+  if(new Date(endDate) <= new Date(startDate)){
+    res.status(400)
+    return res.json({
+      message: "Validation error",
+      statusCode: 400,
+      errors: {
+        endDate: "endDate cannot be on or before startDate"
+      }
+    });
+  } 
+
+  // get all current bookings for spot and check for conflicts
+  let errors = {};
+  let foundConflict = false;
+  
+  // get all days between start and end
+  const dateRange = ((start, end) => {
+    let dates = [];
+    const theDate = new Date(start);
+    while(theDate < new Date(end)) {
+      dates = [...dates, new Date(theDate)];
+      theDate.setDate(theDate.getDate() + 1)
+    }
+    dates = [...dates, new Date(end)];
+    return dates;
+  })
+
+  const currentBookings = await Booking.findAll({
+    where: {
+      spotId: spot.id,
+    },
+    attributes: ['startDate', 'endDate']
+  })
+
+  // test given start and end dates again current bookings
+  currentBookings.forEach(booking => {
+    let bookedStart = booking.startDate;
+    let bookedEnd = booking.endDate;
+    let range = dateRange(bookedStart, bookedEnd);
+    // let tryStart = new Date(startDate);
+    // let tryEnd = new Date(endDate)
+    let checkRange = [];
+
+    range.forEach(d => {
+      d = d.toISOString().slice(0,10);
+      checkRange.push(d);
+    })
+    console.log("CHECK HERE", startDate)
+
+    if(checkRange.includes(startDate)) {
+      errors.startDate = "Start date conflicts with an existing booking";
+      foundConflict = true;
+    };
+    if(checkRange.includes(endDate)) {
+      errors.endDate = "End date conflicts with an existing booking";
+      foundConflict = true;
+    }
+  });
+
+  if(foundConflict) {
+    res.status(403);
+    return res.json({
+      message: "Sorry, this spot is already booked for the specified dates",
+      statusCode: 403,
+      errors
+    })
+  }
+
+
+  const newBooking = await Booking.create({
+    spotId: spot.id,
+    userId: currentUser.id,
+    startDate,
+    endDate
+  });
+
+  res.json(newBooking);
+
+})
+
 
 // REFACTOR make a helper func for finding spotID and throwing error if does not exist 
 
