@@ -13,7 +13,7 @@ const { sequelize, Op } = require("sequelize");
 
 // REFACTOR - getting correct booking information back, but not getting 'Spots' to appear in the requested order 
 router.get("/current", requireAuth, async (req, res) => {
-  const id = req.user;
+  const id = req.user.id;
 
   let Bookings = await Booking.findAll({
     where: {
@@ -61,7 +61,7 @@ router.get("/current", requireAuth, async (req, res) => {
 // edit a booking by bookingid
 router.put('/:bookingId', requireAuth, async (req, res) => {
   const bookingId = req.params.bookingId;
-  const id = req.user;
+  const id = req.user.id;
   const { startDate, endDate }  = req.body; 
   const booking = await Booking.findByPk(bookingId)
 

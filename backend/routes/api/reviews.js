@@ -17,22 +17,63 @@ router.get('/current', [requireAuth, restoreUser ], async (req, res) => {
 
   // const pagination = paginator(req, res); don't need
 
-  const userReviews = await Review.findAll({
+  let userReviews = await Review.findAll({
     where: {
       userId: userId,
-    },
-    include: [
-      {
-        model: User,
-        attributes: ["id", "firstName", "lastName"]
-      },
-      {
-        model: ReviewImage,
-        attributes: ["id", "imgUrl"]
-      }
-    ]
+    }
   });
-  res.json(userReviews)
+
+  let allUserReviews = [];
+  for(let rev of userReviews) {
+    let review = rev.toJSON();
+    let user = await User.findByPk(userId, {
+      attributes: ['id', 'firstName', 'lastName']
+    });
+
+    let spot = await Spot.findByPk(rev.spotId, {
+      attributes: {
+        exclude: ['description', 'createdAd', 'updatedAt']
+      }
+    });
+
+    spot = spot.toJSON();
+
+    let preview = await SpotImage.findOne({
+      where: {
+        spotId: spot.id,
+        isPreview: true,
+      },
+      attributes: ['imgUrl']
+    });
+    console.log("PREVIEW ", preview, "SPOT", spot)
+    if(!preview) {
+      spot.previewImage = "No preview image available"
+    } else {
+      spot.previewImage = preview.imgUrl;
+    }
+
+
+    let revImages = await ReviewImage.findAll({
+      where: {
+        reviewId: review.id
+      },
+      attributes: ['id', 'imgUrl']
+    });
+
+    review.User = user;
+    review.Spot = spot;
+    
+    if(!revImages.length) {
+      review.ReviewImages = "No review images available"
+    } else {
+      review.ReviewImages = revImages;
+    }
+
+
+    allUserReviews.push(review);
+    }
+
+  res.status(200).json(allUserReviews) 
 });
 
 // get all reviews by spot id - i put this in spots router
@@ -41,7 +82,7 @@ router.get('/current', [requireAuth, restoreUser ], async (req, res) => {
 // add an image to review based on reviewid
 router.post('/:reviewId/images', [requireAuth, restoreUser], async (req, res) => {
   const id = req.params.reviewId;
-  const userId = req.user;
+  const userId = req.user.id;
 
   let review = await Review.findByPk(id, {
     attributes: {
@@ -108,7 +149,7 @@ const validateReviewEdit = [
 // edit an exisitng review
 router.put('/:reviewId', [validateReviewEdit, requireAuth, restoreUser], async(req, res) =>{
   const editReview = await Review.findByPk(req.params.reviewId);
-  const userId = req.user;
+  const userId = req.user.id;
 
   // error if review doesn't exist
   if (!editReview) {
@@ -143,7 +184,7 @@ router.put('/:reviewId', [validateReviewEdit, requireAuth, restoreUser], async(r
 // delete a reivew
 router.delete('/:reviewId', [requireAuth, restoreUser], async (req, res) => {
   let review = await Review.findByPk(req.params.id);
-  const userId = req.user;
+  const userId = req.user.id;
 
   if (!review) {
     return res.status(404).json({

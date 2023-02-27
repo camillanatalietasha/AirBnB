@@ -186,7 +186,7 @@ router.get("/:spotId/reviews", async (req, res) => {
     ],
   });
 
-  res.status(200).json(spotReviews);
+  res.status(200).json({Reviews: spotReviews});
 });
 
 
@@ -465,7 +465,7 @@ router.post('/', [requireAuth, restoreUser, validateNewSpot], async (req, res) =
 router.post('/:spotId/images', requireAuth, async (req, res) => {
   const { url, preview } = req.body;
   const spot = await Spot.findByPk(req.params.spotId);
-  const userId = req.user;
+  const userId = req.user.id;
 
   // throw error if spot does not exist
   if (!spot) {
@@ -475,7 +475,7 @@ router.post('/:spotId/images', requireAuth, async (req, res) => {
     });
   }
 
-  if (spot.ownerId !== userId) {
+  if (spot.hostId !== userId) {
     return res.status(403).json({
       message: "Forbidden",
       statusCode: 403,
@@ -501,8 +501,8 @@ router.post('/:spotId/images', requireAuth, async (req, res) => {
 router.put('/:spotId',[requireAuth, validateNewSpot], async (req, res) => {
   const { address, city, state, country, lat, lng, name, description, price } =
     req.body;
-  const spotId = req.params.id;
-  const userId = req.user;
+  const spotId = req.params.spotId;
+  const userId = req.user.id;
   const spot = await Spot.findByPk(req.params.spotId);
 
   // throw error if spot does not exist
@@ -513,14 +513,14 @@ router.put('/:spotId',[requireAuth, validateNewSpot], async (req, res) => {
     });
   }
 
-  if (spot.ownerId !== userId) {
+  if (spot.hostId !== userId) {
     return res.status(403).json({
       message: "Forbidden",
       statusCode: 403,
     });
   }
 
-  const udpatedSpot = await Spot.update(
+  const updatedSpot = await spot.update(
     {
       address,
       city,
@@ -531,19 +531,18 @@ router.put('/:spotId',[requireAuth, validateNewSpot], async (req, res) => {
       name,
       description,
       price,
-    },
-    {
-      where: { id: spotId },
     }
   );
 
-  res.status(200).json(udpatedSpot);
+  console.log(updatedSpot)
+
+  res.status(200).json(updatedSpot);
 });
 
 // delete a spot
 router.delete('/:spotId', [requireAuth, restoreUser], async (req, res) => {
   const spot = await Spot.findByPk(req.params.id);
-  const userId = req.user;
+  const userId = req.user.id;
 
   if (!spot) {
     return res.status(404).json({
@@ -565,37 +564,5 @@ router.delete('/:spotId', [requireAuth, restoreUser], async (req, res) => {
     statusCode: 200,
   });
 });
-
-// -------------------> saving for refactoring
-// router.get("/:spotId", async (req, res) => {
-//   // extract spotId from params
-//   const spotId = req.params.spotId;
-//   // retrieve spot details (with reviews and images)
-//   const getSpot = await Spot.findByPk(spotId, {
-//     include: [
-//       {
-//         model: Review,
-//         attributes: ["stars"], // rename this attribute, count later
-//       },
-//       {
-//         model: SpotImage,
-//       },
-//     ],
-//   });
-//   // convert to JSON object
-//   const allSpotDetails = getSpot.toJSON();
-//   // iterate to total numReviews and sum all ratings
-// //   let ratingTotal = 0;
-// //   let numReviews = 0
-//   allSpotDetails.Reviews.forEach((rev) => {
-//     allSpotDetails.numReviews += 1;
-//     allSpotDetails.avgStarRating += rev.stars;
-//   });
-//   // calculate avg and remove reviews obj
-//   allSpotDetails.avgStarRating = allSpotDetails.avgStarRating / allSpotDetails.numReviews;
-//   delete allSpotDetails.Reviews;
-
-//   res.status(200).json({allSpotDetails});
-// });
 
 module.exports = router;

@@ -18,7 +18,7 @@ const { sequelize, Op } = require("sequelize");
 
 router.delete("/:imageId", requireAuth, async (req, restoreUser) => {
   const imgId = req.params.imageId;
-  const userId = req.user;
+  const userId = req.user.id;
 
   const image = await ReviewImage.findByPk(imgId);
 
