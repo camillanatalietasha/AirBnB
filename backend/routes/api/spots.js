@@ -14,12 +14,54 @@ const { sequelize, Op } = require("sequelize");
 /*================================= routes ================================*/
 // GET all spots
 router.get("/", async (req, res, next) => {
+  // search filters
+  let { page, size, maxLat, minLat, maxLng, minLng, maxPrice, minPrice } =
+    req.query;
+  let where = {};
+  let errors = {};
+
+  if (page < 1) errors.page = "Page must be greater than or equal to 1";
+  if (size < 1) errors.size = "Size must be greater than or equal to 1";
+
+  if ((maxLat && maxLat > 90) || maxLat < -90)
+    errors.maxLat = "Maximum latitude is invalid";
+  else if (maxLat) where.lat = { [Op.lte]: maxLat };
+
+  if ((minLat && minLat > 90) || minLat < -90)
+    errors.minLat = "Minimum latitude is invalid";
+  else if (minLat) where.lat = { [Op.gte]: minLat };
+
+  if ((maxLng && maxLng > 180) || maxLng < -180)
+    errors.maxLng = "Maximum longitude is invalid";
+  else if (maxLng) where.lng = { [Op.lte]: maxLng };
+
+  if ((minLng && minLng > 180) || minLng < -180)
+    errors.minLng = "Minimum latitude is invalid";
+  else if (minLng) where.lng = { [Op.gte]: minLng };
+
+  if (maxPrice && maxPrice < 0)
+    errors.maxPrice = "Maximum price must be greater than or equal to 0";
+  else if (maxPrice) where.price = { [Op.lte]: maxPrice };
+
+  if (minPrice && minPrice < 0)
+    errors.minPrice = "Minimum price must be greater than or equal to 0";
+  else if (minPrice) where.price = { [Op.gte]: minPrice };
+
+  if (Object.keys(errors).length) {
+      res.status(400)
+      return res.json({
+      message: "Validation Error",
+      statusCode: 400,
+      errors,
+    });
+  }
 
   // include all table table in query
   // manipulate object to show aggregate spot rating and preview photo
   const pagination = paginator(req, res);
 
   const spots = await Spot.findAll({
+    where,
     include: [
       {
         model: Review,
@@ -423,82 +465,105 @@ router.post('/', [requireAuth, restoreUser, validateNewSpot], async (req, res) =
 router.post('/:spotId/images', requireAuth, async (req, res) => {
   const { url, preview } = req.body;
   const spot = await Spot.findByPk(req.params.spotId);
+  const userId = req.user;
 
   // throw error if spot does not exist
   if (!spot) {
     return res.status(404).json({
       message: "Spot couldn't be found",
-      statusCode: 404
-    })
-  };
+      statusCode: 404,
+    });
+  }
+
+  if (spot.ownerId !== userId) {
+    return res.status(403).json({
+      message: "Forbidden",
+      statusCode: 403,
+    });
+  }
 
   // create new instance of SpotImage
-  const newSpotImage = await SpotImage.create({ 
-      spotId: spot.id,
-      imgUrl: url,
-      isPreview: preview
+  const newSpotImage = await SpotImage.create({
+    spotId: spot.id,
+    imgUrl: url,
+    isPreview: preview,
   });
 
   res.status(200);
   res.json({
     id: newSpotImage.id,
     url: newSpotImage.imgUrl,
-    preview: newSpotImage.isPreview 
-  })
+    preview: newSpotImage.isPreview,
+  });
 });
 
 // PUT a spot
 router.put('/:spotId',[requireAuth, validateNewSpot], async (req, res) => {
-  const { address, city, state, country, lat, lng, name, description, price } = req.body;
+  const { address, city, state, country, lat, lng, name, description, price } =
+    req.body;
   const spotId = req.params.id;
+  const userId = req.user;
   const spot = await Spot.findByPk(req.params.spotId);
 
   // throw error if spot does not exist
   if (!spot) {
     return res.status(404).json({
       message: "Spot couldn't be found",
-      statusCode: 404
-    })
-  };
-  
-  const udpatedSpot = await Spot.update({
-    address,
-    city,
-    state,
-    country,
-    lat,
-    lng,
-    name,
-    description,
-    price,
-  },
-  {
-    where: { id: spotId },
+      statusCode: 404,
+    });
   }
+
+  if (spot.ownerId !== userId) {
+    return res.status(403).json({
+      message: "Forbidden",
+      statusCode: 403,
+    });
+  }
+
+  const udpatedSpot = await Spot.update(
+    {
+      address,
+      city,
+      state,
+      country,
+      lat,
+      lng,
+      name,
+      description,
+      price,
+    },
+    {
+      where: { id: spotId },
+    }
   );
 
   res.status(200).json(udpatedSpot);
-
-  
 });
 
 // delete a spot
 router.delete('/:spotId', [requireAuth, restoreUser], async (req, res) => {
-  let spot = await Spot.findByPk(req.params.id);
+  const spot = await Spot.findByPk(req.params.id);
+  const userId = req.user;
 
   if (!spot) {
     return res.status(404).json({
       message: "Spot couldn't be found",
       statusCode: 404,
     });
-  };
+  }
+
+  if (spot.ownerId !== userId) {
+    return res.status(403).json({
+      message: "Forbidden",
+      statusCode: 403,
+    });
+  }
 
   await spot.destroy();
   res.staus(200).json({
-    message: 'Successfully deleted',
-    statusCode: 200
+    message: "Successfully deleted",
+    statusCode: 200,
   });
-
 });
 
 // -------------------> saving for refactoring
