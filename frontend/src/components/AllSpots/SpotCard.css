@@ -9,5 +9,7 @@
 
 .spot-card-img {
   width: 275px;
+  min-width: 100%;
   height: 250px;
+  min-height: 100%;
 }
