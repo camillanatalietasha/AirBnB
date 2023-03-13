@@ -2,10 +2,41 @@
     display: none;
 }
 
-/* .nav-menu{
+.nav-bar {
+  top: 0px;
   display: flex;
-  position: sticky;
+  align-items: center;
+  z-index: 1;
   justify-content: space-between;
-  padding: 10px, 30px;
+  list-style: none;
+  padding: 15px 40px;
+  position:sticky;
+  background-color: #00043a;
+  color: #e7ecef;
 }
- */
+
+.profile-dropdown {
+  position: absolute;
+  background-color: #004E89;
+  border: 1px solid #000;
+  list-style: none;
+  padding-left: 10px;
+  top: 80px;
+  right: 15px;
+  border-radius: 7px;
+  border-top-right-radius: 0px;
+  border-top-left-radius: 0px;
+  width: 200px
+}
+
+.profile-dropdown li {
+  margin: 20px 0;
+}
+
+#profile-icon {
+    font-size: 2em;
+    border-radius: 15px;
+    padding: 5px;
+    background-color:#004E89;
+}
+

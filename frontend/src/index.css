@@ -5,6 +5,14 @@
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
+.hover-link:hover {
+  cursor: pointer;
+}
+
+.hover-text:hover {
+  cursor: pointer;
+}
+
 
 /* form styling */
 
