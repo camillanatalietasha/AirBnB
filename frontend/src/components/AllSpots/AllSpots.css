@@ -1,0 +1,12 @@
+#all-spots-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#all-spots-section {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 20px;
+  margin: 20px;
+}

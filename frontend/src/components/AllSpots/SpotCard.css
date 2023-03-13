@@ -1,0 +1,13 @@
+.spot-card {
+  position: relative;
+  width: 275px;
+  height: 275px;
+  border-radius: 10px;
+  box-shadow: 0px, 5px, 5px, #8b8c89;
+  padding: 15px;
+}
+
+.spot-card-img {
+  width: 275px;
+  height: 250px;
+}
