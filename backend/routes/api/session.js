@@ -18,8 +18,8 @@ const validateLogin = [
     .withMessage('Please provide a password.'),
   handleValidationErrors
 ];
-// login
 
+// login
 router.post("/", validateLogin, async (req, res, next) => {
   const { credential, password } = req.body;
 
@@ -34,25 +34,36 @@ router.post("/", validateLogin, async (req, res, next) => {
   }
 
   await setTokenCookie(res, user);
-
   return res.json({
     user: user,
   });
 });
+
+// restore session user
+router.get('/', restoreUser, (req, res) => {
+    const { user } = req;
+    if (user) {
+        // return res.json({
+        //     user: user.toSafeObject()
+        // }); // was not returning the username, first name or last name
+        return res.json({
+          user: {
+            id: user.id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            emai: user.email,
+            username: user.username
+          }
+        })
+    } else return res.json({ user: null });
+});
+
 // log out
 router.delete( '/', (_req, res) => {
     res.clearCookie('token');
     return res.json({ message: 'success' })
 });
 
-router.get('/', restoreUser, (req, res) => {
-    const { user } = req;
-    if (user) {
-        return res.json({
-            user: user.toSafeObject()
-        });
-    } else return res.json({ user: null });
-});
 
 
 

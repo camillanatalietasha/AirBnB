@@ -16,7 +16,7 @@ const { paginator, spotsListMaker } = require("../../utils/helper");
 const router = express.Router();
 const { sequelize, Op } = require("sequelize");
 
-router.delete('/:imageId', requireAuth, async (req, restoreUser) => {
+router.delete('/:imageId', requireAuth, async (req, res) => {
   const imgId = req.params.imageId;
   const userId = req.user.id;
 
