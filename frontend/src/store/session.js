@@ -26,6 +26,16 @@ export const thunkLoginUser = (user) => async (dispatch) => {
   return res;
 };
 
+// TODO export thunk restore user
+export const thunkRestoreUser = () => async dispatch => {
+  const response = await csrfFetch('/api/session');
+  const data = await response.json();
+  dispatch(actionSetUser(data.user));
+  return response;
+};
+
+
+
 // TODO initial state - set user as null 
 const initialState = { user: null };
 
