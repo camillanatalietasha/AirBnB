@@ -12,13 +12,14 @@ function SignupFormModal() {
   const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [errors, setErrors] = useState([]);
+  const [errors, setErrors] = useState({});
   const { closeModal } = useModal();
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const validationError = {};
     if (password === confirmPassword) {
-      setErrors([]);
+      setErrors({});
       return dispatch(
         sessionActions.thunkSignup({
           email,
@@ -26,28 +27,24 @@ function SignupFormModal() {
           firstName,
           lastName,
           password,
-        })
-      )
+        }))
         .then(closeModal)
         .catch(async (res) => {
           const data = await res.json();
-          if (data && data.errors) setErrors(data.errors);
+          setErrors(data.errors);
         });
     }
-    return setErrors([
-      "Confirm Password field must be the same as the Password field",
-    ]);
+    // return setErrors([
+    //   "Confirm Password field must be the same as the Password field",
+    // ]);
+    validationError.confirmPassword = "Confirm Password field must match the Password field";
+    return setErrors(errors.confirmPassword);
   };
 
   return (
     <>
       <h1>Sign Up</h1>
       <form onSubmit={handleSubmit}>
-        <ul>
-          {errors.map((error, idx) => (
-            <li key={idx}>{error}</li>
-          ))}
-        </ul>
         <label>
           Email
           <input
@@ -56,6 +53,11 @@ function SignupFormModal() {
             onChange={(e) => setEmail(e.target.value)}
             required
           />
+        <ul className="form-error">
+          {errors.email && (
+            <li key={errors.email}>{errors.email}</li>
+          )}
+        </ul>
         </label>
         <label>
           Username
@@ -65,6 +67,11 @@ function SignupFormModal() {
             onChange={(e) => setUsername(e.target.value)}
             required
           />
+        <ul className="form-error">
+          {errors.username && (
+            <li key={errors.username}>{errors.username}</li>
+          )}
+        </ul>
         </label>
         <label>
           First Name
@@ -75,6 +82,11 @@ function SignupFormModal() {
             required
           />
         </label>
+        <ul className="form-error">
+          {errors.firstName && (
+            <li key={errors.firstName}>{errors.firstName}</li>
+          )}
+        </ul>
         <label>
           Last Name
           <input
@@ -83,6 +95,11 @@ function SignupFormModal() {
             onChange={(e) => setLastName(e.target.value)}
             required
           />
+        <ul className="form-error">
+          {errors.lastName && (
+            <li key={errors.lastName}>{errors.lastName}</li>
+          )}
+        </ul>
         </label>
         <label>
           Password
@@ -92,6 +109,11 @@ function SignupFormModal() {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
+        <ul className="form-error">
+          {errors.password && (
+            <li key={errors.password}>{errors.password}</li>
+          )}
+        </ul>
         </label>
         <label>
           Confirm Password
@@ -101,6 +123,11 @@ function SignupFormModal() {
             onChange={(e) => setConfirmPassword(e.target.value)}
             required
           />
+        <ul className="form-error">
+          {errors.confirmPassword && (
+            <li key={errors.confirmPassword}>{errors.confirmPassword}</li>
+          )}
+        </ul>
         </label>
         <button type="submit">Sign Up</button>
       </form>
