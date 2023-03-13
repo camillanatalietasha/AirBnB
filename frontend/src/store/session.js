@@ -1,12 +1,19 @@
 import { csrfFetch } from "./csrf";
 
 const SET_USER = 'session/setUser';
+const REMOVE_USER = 'session/removeUser';
 
 // action creators
 const actionSetUser = (user) => {
   return {
     type: SET_USER,
     payload: user
+  };
+};
+
+const actionRemoveUser = () => {
+  return {
+    type: REMOVE_USER,
   };
 };
 
@@ -26,7 +33,7 @@ export const thunkLoginUser = (user) => async (dispatch) => {
   return res;
 };
 
-// TODO export thunk restore user
+// export thunk restore user
 export const thunkRestoreUser = () => async dispatch => {
   const response = await csrfFetch('/api/session');
   const data = await response.json();
@@ -35,11 +42,37 @@ export const thunkRestoreUser = () => async dispatch => {
 };
 
 
+// export thunk signup user
+export const thunkSignup = (user) => async (dispatch) => {
+  const { username, firstName, lastName, email, password } = user;
+  const response = await csrfFetch("/api/users", {
+    method: "POST",
+    body: JSON.stringify({
+      username,
+      firstName,
+      lastName,
+      email,
+      password,
+    }),
+  });
+  const data = await response.json();
+  dispatch(actionSetUser(data.user));
+  return response;
+};
 
-// TODO initial state - set user as null 
+// export thunk logout
+export const thunkLogout = () => async (dispatch) => {
+  const response = await csrfFetch("/api/session", {
+    method: "DELETE",
+  });
+  dispatch(actionRemoveUser());
+  return response;
+};
+
+// initial state - set user as null 
 const initialState = { user: null };
 
-// TODO export default session reducer
+// export default session reducer
 const sessionReducer = (state = initialState, action ) => {
   let newState;
   switch (action.type) {
