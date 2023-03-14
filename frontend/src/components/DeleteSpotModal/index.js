@@ -1,14 +1,14 @@
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
-import { deleteSpot } from "../../store/spots";
+import { thunkDeleteSpot } from "../../store/spots";
 
 function DeleteSpotModal({spotId}) {
   const { closeModal } = useModal();
   const dispatch = useDispatch();
 
   const handleDelete = () => {
-    dispatch(deleteSpot(spotId))
-    closeModal
+    dispatch(thunkDeleteSpot(spotId));
+    closeModal();
   };
 
   return (
