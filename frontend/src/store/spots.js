@@ -2,7 +2,7 @@ import { csrfFetch } from "./csrf";
 import thunk from "redux-thunk";
 
 const LOAD_SPOTS = 'spots/LOAD_SPOTS';
-const ONE_SPOT = 'spots/ONE_SPOT';
+const SINGLE_SPOT = 'spots/SINGLE_SPOT';
 const DELETE_SPOT = 'spots/DELETE_SPOT';
 const UPDATE_SPOT = '/spots/UDPATE_SPOT'
 
@@ -14,9 +14,9 @@ const loadAllSpots = (spots) => {
   };
 };
 
-const loadOneSpot = (spot) => {
+const loadSingleSpot = (spot) => {
   return {
-    type: ONE_SPOT,
+    type: SINGLE_SPOT,
     spot
   };
 };
@@ -42,6 +42,14 @@ export const thunkGetSpots = () => async dispatch => {
   const spots = await res.json();
   dispatch(loadAllSpots(spots));
 };
+
+export const thunkOneSpot = (spotId) => async dispatch => {
+  const res = await csrfFetch(`/api/spots/${spotId}`);
+  const spot = await res.json();
+
+  dispatch(loadSingleSpot(spot));
+  return spot;
+}
 
 export const thunkDeleteSpot = (spotId) => async (dispatch) => {
   const res = await csrfFetch(`/api/spots/${spotId}`, {
@@ -119,7 +127,8 @@ export const thunkUpdateSpot = (updateObj, spotId) => async dispatch => {
 
 const initialState = {
   allSpots: {},
-  oneSpot: {},
+  singleSpot: {},
+  currentUserSpots: {},
 };
 
 const spotsReducer = (state = initialState, action) => {
@@ -131,6 +140,15 @@ const spotsReducer = (state = initialState, action) => {
       });
       newState = {...newState, allSpots: {...newState.allSpots}}
       return newState;
+    case SINGLE_SPOT:
+        newState = {...newState, singleSpot:{...action.spot}}
+        newState.singleSpot.SpotImages = [...action.spot.SpotImages]
+        return newState;
+    case UPDATE_SPOT:
+        delete newState.allSpots[action.spot.id]
+        newState = {...newState, allSpots: {...newState.allSpots}, singleSpot: {...newState.singleSpot}}
+        newState.allSpots[action.spot.id] = {...action.spot}
+        newState.singleSpot[action.spot.id] = {...action.spot,SpotImages: [...action.spot.SpotImages]}
     case DELETE_SPOT:
         delete newState.allSpots[action.spotId]
         newState = {...newState, allSpots: {...newState.allSpots}}
