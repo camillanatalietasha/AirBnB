@@ -15,6 +15,10 @@ function SpotCard({ spot }) {
           <span className='spot-card-ratings'>{spot.avgRating}</span>
         </div>
       </Link>
+      <div className='update-delete-card'>
+        {/* TODO build out edit spots page */}
+        <button className='standard-button' onClick={() => history.push(`/spots/${spot.id}/edit`)}>Update</button>
+      </div>
     </div>
   )
 }
