@@ -37,9 +37,9 @@ const spotsReducer = (state = initialState, action) => {
   switch(action.type){
     case LOAD_SPOTS:
       action.spots.Spots.map(spot => {
-        newState.allSpots[spot.id] = {...spot}
+        return newState.allSpots[spot.id] = {...spot}
       });
-      newState = {... newState, allSpots: {...newState.allSpots}}
+      newState = {...newState, allSpots: {...newState.allSpots}}
       return newState;
     default:
         return state;

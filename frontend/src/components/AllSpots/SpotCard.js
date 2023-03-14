@@ -8,7 +8,7 @@ function SpotCard({ spot }) {
   return (
     <div className='spot-card'>
       <Link key={spot.id} to={`/spots/${spot.id}`}>
-        <img className='spot-card-img' src={spot.previewImage.imgUrl} alt={spot.name} />
+        <img className='spot-card-img' src={spot.previewImage} alt={spot.name} />
         <div className='spot-preview-info'>
           <h3>{spot.name}</h3>
           <h3>{spot.price} per night</h3>

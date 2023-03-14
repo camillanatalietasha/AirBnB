@@ -11,13 +11,13 @@
   list-style: none;
   padding: 15px 40px;
   position:sticky;
-  background-color: #00043a;
-  color: #e7ecef;
+  background-color: rgba(238, 242, 255, 1);
+  color: #000;
 }
 
 .profile-dropdown {
   position: absolute;
-  background-color: #004E89;
+  background-color: rgb(255, 255, 255);
   border: 1px solid #000;
   list-style: none;
   padding-left: 10px;
@@ -40,3 +40,8 @@
     background-color:#004E89;
 }
 
+#logo {
+  position: relative;
+  top: 5px;
+  height: 5em
+}

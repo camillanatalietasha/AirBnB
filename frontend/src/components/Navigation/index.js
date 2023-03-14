@@ -9,12 +9,9 @@ function Navigation({ isLoaded }) {
 
   return (
     <ul className="nav-bar">
-      <li>
-        {/* change home text to logo */}
-        <NavLink exact to="/">
-          Home 
-        </NavLink>
-      </li>
+      <NavLink exact to="/">
+        <img id="logo" src="https://i.imgur.com/YKcsCU6.png" />
+      </NavLink>
       {isLoaded && (
         <li>
           <ProfileButton user={sessionUser} />

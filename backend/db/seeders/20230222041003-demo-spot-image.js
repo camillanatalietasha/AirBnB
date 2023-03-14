@@ -13,7 +13,7 @@ module.exports = {
       [
         {
           spotId: 1,
-          imgUrl: "assets/spot-images/spot1-lyons-treehouse-main.png",
+          imgUrl: "https://i.imgur.com/22e3TPH.jpg",
           isPreview: true,
         },
         {
@@ -23,7 +23,7 @@ module.exports = {
         },
         {
           spotId: 2,
-          imgUrl: "assets/spot-images/spot2-sd-main",
+          imgUrl: "https://i.imgur.com/77IBhxf.jpg",
           isPreview: true,
         },
         {
@@ -38,7 +38,7 @@ module.exports = {
         },
         {
           spotId: 3,
-          imgUrl: "assets/spot-images/spot3-nyc-main.png",
+          imgUrl: "https://i.imgur.com/nLSK8lJ.jpg",
           isPreview: true,
         },
         {
