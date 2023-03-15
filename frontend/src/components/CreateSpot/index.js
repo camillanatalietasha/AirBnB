@@ -178,10 +178,45 @@ function CreateSpot () {
           <h3>Liven up your spot with photos</h3>
           <p>Submit a link to at least one photo to publish your spot</p>
         </div>
+        <input
+          name="previewImage"
+          type="text"
+          placeholder="preview image url"
+          value={previewImage}
+          onChange={(e) => setPreviewImage(e.target.value)}
+        />
+        <input
+          name="imageOne"
+          type="text"
+          placeholder="image url"
+          value={imageOne}
+          onChange={(e) => setImageOne(e.target.value)}
+        />
+        <input
+          name="imageTwo"
+          type="text"
+          placeholder="image url"
+          value={imageTwo}
+          onChange={(e) => setImageTwo(e.target.value)}
+        />
+        <input
+          name="imageThree"
+          type="text"
+          placeholder="image url"
+          value={imageThree}
+          onChange={(e) => setImageThree(e.target.value)}
+        />
+        <input
+          name="imageFour"
+          type="text"
+          placeholder="image url"
+          value={imageFour}
+          onChange={(e) => setImageFour(e.target.value)}
+        />
+        <button type="submit" className="standard-button" onClick={handleSubmit}>Create</button>
       </form>
     </div>
   );
+};
 
-
-
-}
+export default CreateSpot;

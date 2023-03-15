@@ -4,11 +4,13 @@ import * as sessionActions from "../../store/session";
 import OpenModalMenuItem from "./OpenModalMenuItem";
 import LoginFormModal from "../LoginFormModal";
 import SignupFormModal from "../SignupFormModal";
+import { useHistory, Link } from "react-router-dom";
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
   const [showMenu, setShowMenu] = useState(false);
   const ulRef = useRef();
+  const history = useHistory();
 
   const openMenu = () => {
     if (showMenu) return;
@@ -35,12 +37,16 @@ function ProfileButton({ user }) {
     e.preventDefault();
     dispatch(sessionActions.thunkLogout());
     closeMenu();
+    history.push('/');
   };
 
   const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
+  const loggedInClass = (user ? 'loggedIn' : 'noUser')
 
   return (
-    <>
+    <div className="profile-container">
+      {user?
+        (<Link className="create-spot-link-nav" to="/spots/new">Create a New Spot</Link>) : (<></>)}
       <button onClick={openMenu}>
         <i className="fas fa-user-circle" id="profile-icon"/>
       </button>
@@ -71,7 +77,7 @@ function ProfileButton({ user }) {
           </>
         )}
       </ul>
-    </>
+    </div>
   );
 }
 
