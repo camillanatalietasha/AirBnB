@@ -147,22 +147,37 @@ function CreateSpot () {
           />
         </label>
         <div>
-          <h3>Where's your place located?</h3>
+          <h3>Create a title for your spot</h3>
           <p>
-            Guests will only get your exact address once they booked a
-            reservation.
+            Catch guests' attention with a spot title that highlights what makes
+            your place special.
           </p>
         </div>
-        <label>
-          Country
-          <input
-            name="country"
-            type="text"
-            placeholder="..."
-            value={country}
-            onChange={(e) => setCountry(e.target.value)}
-          />
-        </label>
+        <input
+          name="name"
+          type="text"
+          placeholder="..."
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+        <div>
+          <h3>Set a base price for your spot</h3>
+          <p>
+            Competitive pricing can help your listing stand out and rank higher
+            in search results.
+          </p>
+        </div>
+        <input
+          name="price"
+          type="text"
+          placeholder="price per night (USD)"
+          value={price}
+          onChange={(e) => setPrice(e.target.value)}
+        />
+        <div className>
+          <h3>Liven up your spot with photos</h3>
+          <p>Submit a link to at least one photo to publish your spot</p>
+        </div>
       </form>
     </div>
   );
