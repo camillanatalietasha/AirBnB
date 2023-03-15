@@ -4,6 +4,7 @@ import { useHistory, Link } from 'react-router-dom';
 import DeleteSpotModal from '../DeleteSpotModal';
 import OpenModalButton from '../OpenModalButton'
 
+
 function SpotCard({ spot }) {
   const history = useHistory();
 

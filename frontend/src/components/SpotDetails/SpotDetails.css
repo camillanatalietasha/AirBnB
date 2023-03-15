@@ -1,0 +1,31 @@
+.spot-image-gallery {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  grid-gap: 5px;
+}
+
+.main-img-time {
+  grid-row: 2/3;
+  grid-column: 2/3;
+}
+
+.gallery-div {
+  object-fit: cover;
+}
+
+.location-details {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding-bottom: 20px;
+}
+
+.description-reserve-container {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding-bottom: 20px;
+}
+
+/* .reviews-container {
+
+} */
