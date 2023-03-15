@@ -142,8 +142,25 @@ function CreateSpot () {
             name="description"
             rows="10"
             placeholder="..."
-            value={ description }
+            value={description}
             onChange={(e) => setDescription(e.target.value)}
+          />
+        </label>
+        <div>
+          <h3>Where's your place located?</h3>
+          <p>
+            Guests will only get your exact address once they booked a
+            reservation.
+          </p>
+        </div>
+        <label>
+          Country
+          <input
+            name="country"
+            type="text"
+            placeholder="..."
+            value={country}
+            onChange={(e) => setCountry(e.target.value)}
           />
         </label>
       </form>

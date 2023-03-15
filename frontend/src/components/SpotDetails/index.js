@@ -27,9 +27,7 @@ function SingleSpot () {
           <h1>{spot.name}</h1>
           <h2>{spot.city}, {spot.state}, {spot.country}</h2>
         </div>
-        <div className="gallery-div">
           <ImageGallery spotImages={spotImages}/>
-        </div>
         <div className="description-reserve-container">
           <div className="description">
             <h3>Hosted by {spot.Owner.firstName} {spot.Owner.lastName}</h3>
