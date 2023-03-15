@@ -1,11 +1,11 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { thunkCreateSpot } from "../../store/spots";
 
 function CreateSpot () {
   const history = useHistory();
   const dispatch = useDispatch();
-  const { spotId } = useParams();
   const user = useSelector(state => state.session.user);
 
   if(!user) history.push('/');
@@ -47,7 +47,21 @@ function CreateSpot () {
     };
     setValidationErrors()
     // TODO create spot form validation
-  })
+  }, [      
+      address,
+      city,
+      state,
+      country,
+      lat,
+      lng,
+      name,
+      price,
+      description,
+      previewImage,
+      imageOne,
+      imageTwo,
+      imageThree,
+      imageFour,])
 
   const handleSubmit = async e => {
     e.preventDefault();
@@ -74,8 +88,25 @@ function CreateSpot () {
       },
     };
   // dispatch for new spot id
+    const newSpotId = await dispatch(thunkCreateSpot(submitObj));
   // reset fields?
+    setAddress("");
+    setCity("");
+    setState("");
+    setCountry("");
+    setLat("");
+    setLng("");
+    setName("");
+    setPrice("");
+    setDescription("");
+    setPreviewImage("");
+    setImageOne("");
+    setImageTwo("");
+    setImageThree("");
+    setImageFour("");
   // go to new spot page
+
+    history.push(`/spots/${newSpotId}`)
   }
 
   return (

@@ -4,7 +4,8 @@ import thunk from "redux-thunk";
 const LOAD_SPOTS = 'spots/LOAD_SPOTS';
 const SINGLE_SPOT = 'spots/SINGLE_SPOT';
 const DELETE_SPOT = 'spots/DELETE_SPOT';
-const UPDATE_SPOT = '/spots/UDPATE_SPOT'
+const UPDATE_SPOT = '/spots/UDPATE_SPOT';
+const CREATE_SPOT = '/spots/CREATE_SPOT';
 
 // action 
 const loadAllSpots = (spots) => {
@@ -35,6 +36,13 @@ const updateSpot = spot => {
   };
 };
 
+const createSpot = spot => {
+  return {
+    type: CREATE_SPOT,
+    spot
+  }
+}
+
 // thunks
 
 export const thunkGetSpots = () => async dispatch => {
@@ -61,7 +69,7 @@ export const thunkUpdateSpot = (updateObj, spotId) => async dispatch => {
   const { newSpot, previewImage, images } = updateObj;
   const res = await csrfFetch(`/api/spots/${spotId}`, {
     method: 'PUT',
-    body: JSON.stringify(updateObj)
+    body: JSON.stringify(newSpot)
   });
 
   const updatedSpotPage = await csrfFetch(`/api/spots/${spotId}`);
@@ -72,7 +80,7 @@ export const thunkUpdateSpot = (updateObj, spotId) => async dispatch => {
     await csrfFetch(`/api/spot-images/${img.id}`, {method: "DELETE"})
   };
 
-  const prevImg = await csrfFetch(`/api/spots/${spotId}/images`, {
+  await csrfFetch(`/api/spots/${spotId}/images`, {
     method: "POST",
     body: JSON.stringify({
       url: previewImage,
@@ -123,6 +131,40 @@ export const thunkUpdateSpot = (updateObj, spotId) => async dispatch => {
   dispatch(updateSpot(doneUpdatedSpot));
 };
 
+export const thunkCreateSpot = (submitObj) => async dispatch => {
+  const { newSpot, previewImage, images } = submitObj;
+  // add new spot to database
+  const res = await csrfFetch('/api/spots', {
+    method: 'POST',
+    body: JSON.stringify(newSpot)
+  })
+  const spot = await res.json();
+  const spotId = spot.id;
+  // add new preview image to database
+  await csrfFetch(`/api/spots/${spotId}/images`, {
+    method: 'POST',
+    body: JSON.stringify({
+      url: previewImage,
+      isPreview: true
+    })
+  })
+  // map array of other images
+  images.map(async (img) => {
+    await csrfFetch(`api/spots/${spotId}/images`, {
+      method: 'POST',
+      body: JSON.stringify({
+        url: img,
+        isPreview: false
+      })
+    })
+  })
+  // get new spot's id and return
+  const newSpotRes = await csrfFetch(`/api/spots/${spotId}`);
+  const completedSpot = newSpotRes.json();
+  dispatch(createSpot(completedSpot));
+  return spotId;
+}
+
 /* ============================================================================= */
 
 const initialState = {
@@ -143,6 +185,10 @@ const spotsReducer = (state = initialState, action) => {
     case SINGLE_SPOT:
         newState.singleSpot = action.spot
         newState = {...state, singleSpot: {...action.spot}}
+        return newState;
+    case CREATE_SPOT:
+        newState = {...newState, allSpots: {...state.allSpots}}
+        newState.allSpots[action.spot.id] = action.spot
         return newState;
     case UPDATE_SPOT:
         delete newState.allSpots[action.spot.id]
