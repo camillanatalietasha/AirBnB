@@ -1,5 +1,5 @@
 import { csrfFetch } from "./csrf";
-import thunk from "redux-thunk";
+
 
 const LOAD_SPOTS = 'spots/LOAD_SPOTS';
 const SINGLE_SPOT = 'spots/SINGLE_SPOT';

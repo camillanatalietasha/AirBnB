@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { thunkOneSpot } from '../../store/spots'
 import './SpotDetails.css'
 import ImageGallery from "./ImageGallery";
+import Reviews from "../Reviews";
 // TODO ReserveSpot Component
 
 function SingleSpot () { 
@@ -36,10 +37,7 @@ function SingleSpot () {
           {/* TODO add reserve spot link here */}
           <button>Reserve Spot</button>
         </div>
-        <div className="reviews-container">
-          {/* TODO add reviews link here */}
-          <p>REVIEWS WILL GO HERE</p>
-        </div>
+        <Reviews spot={spot} />
       </div>
     </div>
   )
