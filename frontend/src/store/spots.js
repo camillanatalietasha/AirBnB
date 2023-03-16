@@ -140,6 +140,7 @@ export const thunkCreateSpot = (submitObj) => async dispatch => {
   })
   const spot = await res.json();
   const spotId = spot.id;
+
   // add new preview image to database
   await csrfFetch(`/api/spots/${spotId}/images`, {
     method: 'POST',
@@ -148,16 +149,45 @@ export const thunkCreateSpot = (submitObj) => async dispatch => {
       isPreview: true
     })
   })
-  // map array of other images
-  images.map(async (img) => {
-    await csrfFetch(`api/spots/${spotId}/images`, {
+
+  // add other images
+  if (images.imageOne) {
+    await csrfFetch(`/api/spots/${spotId}/images`, {
       method: 'POST',
       body: JSON.stringify({
-        url: img,
+        url: images.imageOne,
         isPreview: false
       })
     })
-  })
+  };
+  if (images.imageTwo) {
+    await csrfFetch(`/api/spots/${spotId}/images`, {
+      method: 'POST',
+      body: JSON.stringify({
+        url: images.imageTwo,
+        isPreview: false
+      })
+    })
+  };
+  if (images.imageThree) {
+    await csrfFetch(`/api/spots/${spotId}/images`, {
+      method: 'POST',
+      body: JSON.stringify({
+        url: images.imageThree,
+        isPreview: false
+      })
+    })
+  };
+  if (images.imageFour) {
+    await csrfFetch(`/api/spots/${spotId}/images`, {
+      method: 'POST',
+      body: JSON.stringify({
+        url: images.imageFour,
+        isPreview: false
+      })
+    })
+  };
+
   // get new spot's id and return
   const newSpotRes = await csrfFetch(`/api/spots/${spotId}`);
   const completedSpot = newSpotRes.json();
