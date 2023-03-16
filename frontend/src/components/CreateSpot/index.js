@@ -2,6 +2,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { thunkCreateSpot } from "../../store/spots";
+import { validateSpot } from "./SpotValidation";
+import './CreateSpot.css'
 
 function CreateSpot () {
   const history = useHistory();
@@ -45,7 +47,7 @@ function CreateSpot () {
       imageThree,
       imageFour,
     };
-    // TODO create spot form validation
+    setErrors(validateSpot(spot))
   }, [      
       address,
       city,
@@ -65,6 +67,8 @@ function CreateSpot () {
   const handleSubmit = async e => {
     e.preventDefault();
     setSubmitted(true);
+    if(errors.hasErr === true) return null;
+
 
     const submitObj = {
       newSpot: {
@@ -87,11 +91,7 @@ function CreateSpot () {
       },
     };
   // dispatch for new spot id
-    const newSpotCreated = await dispatch(thunkCreateSpot(submitObj))
-      .catch(async (res) => {
-        const data = res.json();
-        if (data && data.errors) setErrors(data.errors);
-      });
+    const newSpotCreated = await dispatch(thunkCreateSpot(submitObj));
   // reset fields?
     setAddress("");
     setCity("");
@@ -124,7 +124,7 @@ function CreateSpot () {
           </p>
         </div>
         <label>
-          Country {(submitted && errors.country) ? <p className="errors">{errors.country}</p> : (<></>)}
+          Country {(submitted === true && errors.country) ? <p className="errors">{errors.country}</p> : (<></>)}
           <input
             name="country"
             type="text"
@@ -134,7 +134,7 @@ function CreateSpot () {
           />
         </label>
         <label>
-          Street Address {(submitted && errors.address.length) ? <p className="errors">{errors.address}</p> : (<></>)}
+          Street Address {(submitted === true && errors.address) ? <p className="errors">{errors.address}</p> : (<></>)}
           <input
             name="address"
             type="text"
@@ -144,7 +144,7 @@ function CreateSpot () {
           />
         </label>
         <label>
-          City {(submitted && errors.city.length) ? <p className="errors">{errors.city}</p> : (<></>)}
+          City {(submitted && errors.city) ? <p className="errors">{errors.city}</p> : (<></>)}
           <input
             name="city"
             type="text"
@@ -154,7 +154,7 @@ function CreateSpot () {
           />
         </label>
         <label>
-          State {(submitted && errors.state.length) ? <p className="errors">{errors.state}</p> : (<></>)}
+          State {(submitted && errors.state) ? <p className="errors">{errors.state}</p> : (<></>)}
           <input
             name="state"
             type="text"
@@ -164,7 +164,7 @@ function CreateSpot () {
           />
         </label>
         <label>
-          Latitude {(submitted && errors.lat.length) ? <p className="errors">{errors.lat}</p> : (<></>)}
+          Latitude
           <input
             name="lat"
             type="number"
@@ -174,7 +174,7 @@ function CreateSpot () {
              />
         </label>
         <label>
-          Longitude {(submitted && errors.lng.length) ? <p className="errors">{errors.lng}</p> : (<></>)}
+          Longitude
           <input
             name="lng"
             type="number"
@@ -191,7 +191,7 @@ function CreateSpot () {
               like fast wif or parking, and what you love about the
               neighborhood.
             </p>
-            {(submitted && errors.description.length) ? <p className="errors">{errors.description}</p> : (<></>)}
+            {(submitted === true && errors.description) ? <p className="errors">{errors.description}</p> : (<></>)}
           </div>
           <textarea
             name="description"
@@ -207,7 +207,7 @@ function CreateSpot () {
             Catch guests' attention with a spot title that highlights what makes
             your place special.
           </p>
-          {(submitted && errors.title.length) ? <p className="errors">{errors.title}</p> : (<></>)}
+          {(submitted === true && errors.title) ? <p className="errors">{errors.title}</p> : (<></>)}
         </div>
         <input
           name="name"
@@ -222,7 +222,7 @@ function CreateSpot () {
             Competitive pricing can help your listing stand out and rank higher
             in search results.
           </p>
-          {(submitted && errors.price.length) ? <p className="errors">{errors.price}</p> : (<></>)}
+          {(submitted === true && errors.price) ? <p className="errors">{errors.price}</p> : (<></>)}
         </div>
         <input
           name="price"
@@ -235,14 +235,16 @@ function CreateSpot () {
           <h3>Liven up your spot with photos</h3>
           <p>Submit a link to at least one photo to publish your spot</p>
         </div>
+        {(submitted === true && errors.previewImage) ? <p className="errors">{errors.previewImage}</p> : (<></>)}
         <input
           name="previewImage"
           type="text"
           placeholder="preview image url"
           value={previewImage}
-          required="true"
+          required={true}
           onChange={(e) => setPreviewImage(e.target.value)}
         />
+        {(submitted === true && errors.imageOne) ? <p className="errors">{errors.imageOne}</p> : (<></>)}
         <input
           name="imageOne"
           type="text"
@@ -250,6 +252,7 @@ function CreateSpot () {
           value={imageOne}
           onChange={(e) => setImageOne(e.target.value)}
         />
+        {(submitted === true && errors.imageTwo) ? <p className="errors">{errors.imageTwo}</p> : (<></>)}
         <input
           name="imageTwo"
           type="text"
@@ -257,6 +260,7 @@ function CreateSpot () {
           value={imageTwo}
           onChange={(e) => setImageTwo(e.target.value)}
         />
+        {(submitted === true && errors.imageThree) ? <p className="errors">{errors.imageThree}</p> : (<></>)}
         <input
           name="imageThree"
           type="text"
@@ -264,6 +268,7 @@ function CreateSpot () {
           value={imageThree}
           onChange={(e) => setImageThree(e.target.value)}
         />
+        {(submitted === true && errors.imageFour) ? <p className="errors">{errors.imageFour}</p> : (<></>)}
         <input
           name="imageFour"
           type="text"
