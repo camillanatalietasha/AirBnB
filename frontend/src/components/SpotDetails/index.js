@@ -14,7 +14,7 @@ function SingleSpot () {
 
   useEffect(() => {
     dispatch(thunkOneSpot(spotId))
-  }, [dispatch]);
+  }, [dispatch, spotId]);
 
   if(!Object.values(spot).length) return null;
 

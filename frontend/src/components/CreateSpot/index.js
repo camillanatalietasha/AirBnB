@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { thunkCreateSpot } from "../../store/spots";
 
@@ -25,7 +25,7 @@ function CreateSpot () {
   const [imageThree, setImageThree] = useState("");
   const [imageFour, setImageFour] = useState("");
 
-  const [validationErrors, setValidationErrors] = useState();
+  const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState();
 
   useEffect(() => {
@@ -45,7 +45,6 @@ function CreateSpot () {
       imageThree,
       imageFour,
     };
-    setValidationErrors()
     // TODO create spot form validation
   }, [      
       address,
@@ -88,7 +87,11 @@ function CreateSpot () {
       },
     };
   // dispatch for new spot id
-    const newSpotId = await dispatch(thunkCreateSpot(submitObj));
+    const newSpotCreated = await dispatch(thunkCreateSpot(submitObj))
+      .catch(async (res) => {
+        const data = res.json();
+        if (data && data.errors) setErrors(data.errors);
+      });
   // reset fields?
     setAddress("");
     setCity("");
@@ -106,11 +109,11 @@ function CreateSpot () {
     setImageFour("");
   // go to new spot page
 
-    history.push(`/spots/${newSpotId}`)
-  }
+    if(newSpotCreated)history.push(`/spots/${newSpotCreated.id}`)
+  };
 
   return (
-    <div>
+    <div className="create-spot-container">
       <form id="create-spot-form">
         <h1>Create a New Spot</h1>
         <div>
@@ -121,7 +124,7 @@ function CreateSpot () {
           </p>
         </div>
         <label>
-          Country
+          Country {(submitted && errors.country) ? <p className="errors">{errors.country}</p> : (<></>)}
           <input
             name="country"
             type="text"
@@ -131,7 +134,7 @@ function CreateSpot () {
           />
         </label>
         <label>
-          Street Address
+          Street Address {(submitted && errors.address.length) ? <p className="errors">{errors.address}</p> : (<></>)}
           <input
             name="address"
             type="text"
@@ -141,7 +144,7 @@ function CreateSpot () {
           />
         </label>
         <label>
-          City
+          City {(submitted && errors.city.length) ? <p className="errors">{errors.city}</p> : (<></>)}
           <input
             name="city"
             type="text"
@@ -151,7 +154,7 @@ function CreateSpot () {
           />
         </label>
         <label>
-          State
+          State {(submitted && errors.state.length) ? <p className="errors">{errors.state}</p> : (<></>)}
           <input
             name="state"
             type="text"
@@ -161,6 +164,26 @@ function CreateSpot () {
           />
         </label>
         <label>
+          Latitude {(submitted && errors.lat.length) ? <p className="errors">{errors.lat}</p> : (<></>)}
+          <input
+            name="lat"
+            type="number"
+            placeholder="..."
+            value={lat}
+            onChange={(e) => setLat(e.target.value)}
+             />
+        </label>
+        <label>
+          Longitude {(submitted && errors.lng.length) ? <p className="errors">{errors.lng}</p> : (<></>)}
+          <input
+            name="lng"
+            type="number"
+            placeholder="..."
+            value={lng}
+            onChange={(e) => setLng(e.target.value)}
+             />
+        </label>
+        <label>
           <div>
             <h3>Describe your place to guests</h3>
             <p>
@@ -168,6 +191,7 @@ function CreateSpot () {
               like fast wif or parking, and what you love about the
               neighborhood.
             </p>
+            {(submitted && errors.description.length) ? <p className="errors">{errors.description}</p> : (<></>)}
           </div>
           <textarea
             name="description"
@@ -183,6 +207,7 @@ function CreateSpot () {
             Catch guests' attention with a spot title that highlights what makes
             your place special.
           </p>
+          {(submitted && errors.title.length) ? <p className="errors">{errors.title}</p> : (<></>)}
         </div>
         <input
           name="name"
@@ -197,6 +222,7 @@ function CreateSpot () {
             Competitive pricing can help your listing stand out and rank higher
             in search results.
           </p>
+          {(submitted && errors.price.length) ? <p className="errors">{errors.price}</p> : (<></>)}
         </div>
         <input
           name="price"
@@ -214,6 +240,7 @@ function CreateSpot () {
           type="text"
           placeholder="preview image url"
           value={previewImage}
+          required="true"
           onChange={(e) => setPreviewImage(e.target.value)}
         />
         <input

@@ -162,7 +162,7 @@ export const thunkCreateSpot = (submitObj) => async dispatch => {
   const newSpotRes = await csrfFetch(`/api/spots/${spotId}`);
   const completedSpot = newSpotRes.json();
   dispatch(createSpot(completedSpot));
-  return spotId;
+  return completedSpot;
 }
 
 /* ============================================================================= */

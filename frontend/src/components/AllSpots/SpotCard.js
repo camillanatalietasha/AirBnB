@@ -1,5 +1,4 @@
 import './SpotCard.css';
-import { useSelector } from 'react-redux';
 import { useHistory, Link } from 'react-router-dom';
 import DeleteSpotModal from '../DeleteSpotModal';
 import OpenModalButton from '../OpenModalButton'
