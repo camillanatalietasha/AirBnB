@@ -1,11 +1,12 @@
 // TODO 
-// create reviews reducers add get all reviews for spot 
+// create reviews reducers add get all reviews for spot
 // add modal for post review
 // add edit review modal
 
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { thunkGetSpotReviews, thunkGetUserReviews } from '../../store/reviews';
+import ReviewDetails from './ReviewDetails';
 
 function Reviews({ spotId }) {
   const dispatch = useDispatch();
@@ -20,6 +21,10 @@ function Reviews({ spotId }) {
   }, [dispatch])
 
   return (
+    <>
+    <div className='rating-div'>
+      <ReviewDetails spot={spot} />
+    </div>
     <div className='reviews-div'>
       {/* add post review button here */}
         {spotReviews && reviews.map(r => (
@@ -35,6 +40,7 @@ function Reviews({ spotId }) {
         ))}
         {user && user.id !== spot.ownerId && !reviews.length ? (<h3>Be the first to post a review!</h3>) : (<></>)}
     </div>
+  </>
   );
 }
 

@@ -19,12 +19,12 @@ const userReviews = reviews => {
     reviews
   }
 };
-// const addReview = reviewObj => {
-//   return {
-//     type: ADD_REVIEW,
-//     reviewObj
-//   }
-// };
+const addReview = reviewObj => {
+  return {
+    type: ADD_REVIEW,
+    reviewObj
+  }
+};
 // const updateReview = reviewId => {
 //   return {
 //     type: UPDATE_REVIEW,
@@ -55,6 +55,20 @@ export const thunkGetUserReviews = () => async dispatch => {
   dispatch(userReviews(reviews))
 }
 
+export const thunkAddReview = (revObj, spotId) => async dispatch => {
+    const reviewRes = await csrfFetch(`/api/spots/${spotId}/reviews`, {
+      method: "POST",
+      body: JSON.stringify(revObj),
+    });
+    if (reviewRes.ok) {
+      dispatch(addReview(review))
+      const res = await csrfFetch(`/api/spots/${spotId}/reviews`);
+      const spotReviews = await res.json();
+      dispatch(spotReviews(reviews));
+    }
+}
+
+/*======================================================*/ 
 const initialState = { spot: {}, user: {} }
 
 const reviewsReducer = (state = initialState, action) => {
@@ -66,13 +80,13 @@ const reviewsReducer = (state = initialState, action) => {
         action.reviews.Reviews.map(rev=>{
             spotReviews[rev.id] = rev
         })
-        return {...newState, spot: {...spotReviews}}
+        return {...newState, spot: {...spotReviews}};
     case USER_REVIEWS:
         const userReviews = {}
         action.reviews.Reviews.map(rev=>{
             userReviews[rev.id] = rev
         })
-        return {...newState, user: {...userReviews}}
+        return {...newState, user: {...userReviews}};
     default:
         return state;
   };

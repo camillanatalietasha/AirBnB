@@ -92,7 +92,7 @@ function CreateSpot () {
     };
   // dispatch for new spot id
     const newSpotCreated = await dispatch(thunkCreateSpot(submitObj));
-  // reset fields?
+  // reset fields
     setAddress("");
     setCity("");
     setState("");
