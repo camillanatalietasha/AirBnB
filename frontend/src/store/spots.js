@@ -204,7 +204,9 @@ export const thunkCreateSpot = (submitObj) => async dispatch => {
 }
 
 export const thunkUserSpots = () => async dispatch => {
-  
+  const res = await csrfFetch(`/api/spots/current`);
+  const spots = await res.json();
+  dispatch(userSpots(spots));
 }
 
 /* ============================================================================= */
@@ -241,7 +243,11 @@ const spotsReducer = (state = initialState, action) => {
     case DELETE_SPOT:
         delete newState.allSpots[action.spotId]
         newState = {...newState, allSpots: {...newState.allSpots}}
-        return newState
+        return newState;
+    case USER_SPOTS:
+        newState.currentUserSpots = {}
+        action.spots.Spots.map(spot => { newState.currentUserSpots[spot.id] = spot })
+        return newState;
     default:
         return state;
   }
