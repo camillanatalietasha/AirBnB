@@ -15,7 +15,7 @@ const paginator = function (req, res) {
   let pagination = {};
 
   // set default pagination if not specified in query
-  size = !size || parseInt(size) <= 0 ? (size = 3) : (size = parseInt(size));
+  size = !size || parseInt(size) <= 0 ? (size = 6) : (size = parseInt(size));
   page = !page || parseInt(page) <= 0 ? (page = 1) : (page = parseInt(page));
 
   if (page >= 1 && size >= 1) {

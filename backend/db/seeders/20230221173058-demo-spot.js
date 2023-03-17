@@ -39,19 +39,6 @@ module.exports = {
           price: 500,
         },
         {
-          hostId: 5,
-          address: "9876 Gangun Rd.",
-          city: "Theed",
-          state: "Naboo",
-          country: "Chommell",
-          lat: 40.69905,
-          lng: -73.863638,
-          name: "Entire Palace on Naboo",
-          description:
-            "Rem tempora eveniet et atque voluptatum vel commodi quia. Aut enim  sed facere enim et repudiandae Quis ab alias optio. Ex dignissimos natus eum consectetur cumque sit ullam laboriosam quo accusantium consequuntur. ",
-          price: 600,
-        },
-        {
           hostId: 3,
           address: "555 Rover St.",
           city: "Red City",
@@ -63,6 +50,19 @@ module.exports = {
           description:
             "Rem tempora eveniet et atque voluptatum vel commodi quia. Aut enim  sed facere enim et repudiandae Quis ab alias optio. \n Ex dignissimos natus eum consectetur cumque sit ullam laboriosam quo accusantium consequuntur. ",
           price: 900,
+        },
+        {
+          hostId: 5,
+          address: "9876 Gangun Rd.",
+          city: "Theed",
+          state: "Naboo",
+          country: "Chommell",
+          lat: 40.69905,
+          lng: -73.863638,
+          name: "Entire Palace on Naboo",
+          description:
+            "Rem tempora eveniet et atque voluptatum vel commodi quia. Aut enim  sed facere enim et repudiandae Quis ab alias optio. Ex dignissimos natus eum consectetur cumque sit ullam laboriosam quo accusantium consequuntur. ",
+          price: 600,
         },
       ],
       {}
@@ -77,9 +77,10 @@ module.exports = {
       {
         name: {
           [Op.in]: [
-            "Lyons Mountain Treehouse",
-            "Chic Upper West Side Flat",
-            "Beachfront in La Jolla",
+            "Private room on new space station",
+            "Bungalow on Venus",
+            "Dome Glamping on Mars",
+            "Entire Palace on Naboo",
           ],
         },
       },

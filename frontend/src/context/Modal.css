@@ -10,6 +10,7 @@
   height: 400px;
   max-height: 100%;
   z-index: 1010;
+  font-size: 1em;;
 }
 
 #modal-background {

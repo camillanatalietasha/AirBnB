@@ -4,6 +4,7 @@
 	height: 1500px;
   display: flex;
   justify-items: center;
+  font-size: 2em;
 }
 
 #all-spots {
