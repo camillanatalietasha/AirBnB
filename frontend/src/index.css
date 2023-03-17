@@ -2,16 +2,20 @@
 * {
   margin: 0;
   padding: 0;
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Manrope', sans-serif;
+  font-size: 10px;
 }
 
 .hover-link:hover {
   cursor: pointer;
 }
 
-.hover-text:hover {
-  cursor: pointer;
-}
 
 /* form styling */
 
@@ -29,8 +33,16 @@ input {
 }
 
 button {
-  background-color: #004e89;
-  color: #e7ecef;
-  border-radius: 20px;
-  padding: 10px;
+		width: 120px;
+		height: 30px;
+		background: none;
+		border: 2px solid #C4C4C4;
+    color: black;
+		border-radius: 5px;
+		background-color: tranparent;
+}
+
+button:hover {
+  cursor: pointer;
+  border-color: #AAAAAA;
 }

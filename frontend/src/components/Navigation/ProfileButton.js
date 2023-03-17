@@ -47,9 +47,9 @@ function ProfileButton({ user }) {
     <div className="profile-container">
       {user?
         (<Link className="create-spot-link-nav" to="/spots/new">Create a New Spot</Link>) : (<></>)}
-      <button onClick={openMenu}>
+      <div onClick={openMenu}>
         <i className="fas fa-user-circle" id="profile-icon"/>
-      </button>
+      </div>
       <ul className={ulClassName} ref={ulRef}>
         {user ? (
           <>

@@ -13,8 +13,8 @@ function AllSpots () {
   }, [dispatch]);
 
   return (
-    <div id="all-spots-div">
-      <section id="all-spots-section">
+    <div id="site-content">
+      <section id="all-spots">
         {spots && Object.values(spots).map(spot => (
           <SpotCard key={spot.id} spot={spot} />
         ))}

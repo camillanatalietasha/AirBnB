@@ -39,19 +39,6 @@ module.exports = {
           price: 500,
         },
         {
-          hostId: 3,
-          address: "555 Rover St.",
-          city: "Red City",
-          state: "Mars",
-          country: "Milky Way Galaxy",
-          lat: 14.370286,
-          lng: 103.806475,
-          name: "Dome Glamping on Mars",
-          description:
-            "Rem tempora eveniet et atque voluptatum vel commodi quia. Aut enim  sed facere enim et repudiandae Quis ab alias optio. \n Ex dignissimos natus eum consectetur cumque sit ullam laboriosam quo accusantium consequuntur. ",
-          price: 900,
-        },
-        {
           hostId: 5,
           address: "9876 Gangun Rd.",
           city: "Theed",
@@ -63,6 +50,19 @@ module.exports = {
           description:
             "Rem tempora eveniet et atque voluptatum vel commodi quia. Aut enim  sed facere enim et repudiandae Quis ab alias optio. Ex dignissimos natus eum consectetur cumque sit ullam laboriosam quo accusantium consequuntur. ",
           price: 600,
+        },
+        {
+          hostId: 3,
+          address: "555 Rover St.",
+          city: "Red City",
+          state: "Mars",
+          country: "Milky Way Galaxy",
+          lat: 14.370286,
+          lng: 103.806475,
+          name: "Dome Glamping on Mars",
+          description:
+            "Rem tempora eveniet et atque voluptatum vel commodi quia. Aut enim  sed facere enim et repudiandae Quis ab alias optio. \n Ex dignissimos natus eum consectetur cumque sit ullam laboriosam quo accusantium consequuntur. ",
+          price: 900,
         },
       ],
       {}

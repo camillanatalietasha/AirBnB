@@ -13,7 +13,10 @@
   position:sticky;
   background-color: rgba(238, 242, 255, 1);
   color: #000;
+  border-bottom: solid 2px #C5C3C6;
 }
+
+.profile
 
 .profile-dropdown {
   position: absolute;
@@ -30,18 +33,29 @@
 }
 
 .profile-dropdown li {
-  margin: 20px 0;
+  	float: left;
+		list-style: none;
+		padding: 22px 18px;
+		border: 1px solid #DCE0E0;
+		height: 61px;
+		font-size: 14px;
+		border-left-color: transparent;
+		border-bottom-color: transparent;
+		border-top: none;
 }
 
 #profile-icon {
-    font-size: 2em;
+    font-size: 4em;
     border-radius: 15px;
     padding: 5px;
-    background-color:#004E89;
+    background-color:none;
 }
 
 #logo {
   position: relative;
   top: 5px;
-  height: 5em
+  margin-left: -2px;
+  height: 6em
 }
+
+
