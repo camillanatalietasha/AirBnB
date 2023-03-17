@@ -6,6 +6,7 @@ const SINGLE_SPOT = 'spots/SINGLE_SPOT';
 const DELETE_SPOT = 'spots/DELETE_SPOT';
 const UPDATE_SPOT = '/spots/UDPATE_SPOT';
 const CREATE_SPOT = '/spots/CREATE_SPOT';
+const USER_SPOTS = '/spots/USER_SPOTS';
 
 // action 
 const loadAllSpots = (spots) => {
@@ -40,8 +41,15 @@ const createSpot = spot => {
   return {
     type: CREATE_SPOT,
     spot
-  }
-}
+  };
+};
+
+const userSpots = spots => {
+  return {
+    type: USER_SPOTS,
+    spots
+  };
+};
 
 // thunks
 
