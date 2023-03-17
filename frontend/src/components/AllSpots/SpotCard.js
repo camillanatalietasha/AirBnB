@@ -1,4 +1,5 @@
 import './SpotCard.css';
+import { useSelector } from 'react-redux';
 import { useHistory, Link } from 'react-router-dom';
 import DeleteSpotModal from '../DeleteSpotModal';
 import OpenModalButton from '../OpenModalButton'
@@ -14,14 +15,13 @@ function SpotCard({ spot }) {
         <div className='spot-preview-info'>
           <h3>{spot.name}</h3>
           <h3>{spot.price} per night</h3>
+          <span className='spot-card-ratings'>{spot.avgRating}</span>
         </div>
       </Link>
-        <p className='spot-card-ratings'>{spot.avgRating}</p>
-      <div className='update-delete-card-div'>
-        {/* TODO build out edit spots page */}
+      {/* <div className='update-delete-card-div'>
         <button className='standard-button' onClick={() => history.push(`/spots/${spot.id}/edit`)}>Update</button>
         <OpenModalButton buttonText="Delete" modalComponent={<DeleteSpotModal spotId={spot.id} />} />
-      </div>
+      </div> */}
     </div>
   )
 }
