@@ -195,6 +195,10 @@ export const thunkCreateSpot = (submitObj) => async dispatch => {
   return completedSpot;
 }
 
+export const thunkUserSpots = () => async dispatch => {
+  
+}
+
 /* ============================================================================= */
 
 const initialState = {
