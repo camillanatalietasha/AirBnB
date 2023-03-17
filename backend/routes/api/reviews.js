@@ -45,7 +45,6 @@ router.get('/current', [requireAuth, restoreUser ], async (req, res) => {
       },
       attributes: ['imgUrl']
     });
-    console.log("PREVIEW ", preview, "SPOT", spot)
     if(!preview) {
       spot.previewImage = "No preview image available"
     } else {

@@ -534,7 +534,6 @@ router.put('/:spotId',[requireAuth, validateNewSpot], async (req, res) => {
     }
   );
 
-  console.log(updatedSpot)
 
   res.status(200).json(updatedSpot);
 });
