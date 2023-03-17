@@ -2,7 +2,7 @@ const urlTest = url => {
   const allowed = ['png', 'jpg', 'jpeg'];
   let urlParts = url.split('');
   let passed = false;
-  if (urlParts.length > 1 && allowed.includes(urlParts[urlParts.length - 1])) passed = false;
+  if (Boolean(urlParts.length) > 1 && allowed.includes(urlParts[urlParts.length - 1])) passed = false;
   
   return passed;
 }
@@ -67,23 +67,23 @@ export const validateSpot = (spot) => {
       errors.price = "Price must be a number greater than 1"
       errors.hasErr = true
     }
-    if(spot.previewImage.length && !urlTest(spot.previewImage) === false) {
+    if(Boolean(spot.previewImage.length) && !urlTest(spot.previewImage) === false) {
       errors.previewImage = 'Images must be in one of these formats: .png, .jpeg, .jpg'
       errors.hasErr = true
     }
-    if(spot.imageOne.length && !urlTest(spot.imageOne) === false) {
+    if(Boolean(spot.imageOne.length) && !urlTest(spot.imageOne) === false) {
       errors.imageOne = 'Images must be in one of these formats: .png, .jpeg, .jpg'
       errors.hasErr = true
     }
-    if(spot.imageTwo.length && !urlTest(spot.imageTwo) === false) {
+    if(Boolean(spot.imageTwo.length) && !urlTest(spot.imageTwo) === false) {
       errors.imageTwo = 'Images must be in one of these formats: .png, .jpeg, .jpg'
       errors.hasErr = true
     }
-    if(spot.imageThree.length && !urlTest(spot.imageThree) === false) {
+    if(Boolean(spot.imageThree.length) && !urlTest(spot.imageThree) === false) {
       errors.imageThree = 'Images must be in one of these formats: .png, .jpeg, .jpg'
       errors.hasErr = true
     }
-    if(spot.imageFour.length && !urlTest(spot.imageFour) === false) {
+    if(Boolean(spot.imageFour.length) && !urlTest(spot.imageFour) === false) {
       errors.imageFour = 'Images must be in one of these formats: .png, .jpeg, .jpg'
       errors.hasErr = true
     }
