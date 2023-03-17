@@ -1,15 +1,15 @@
 import { useModal } from "../../context/Modal";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
 import { thunkOneSpot } from "../../store/spots";
 import { thunkAddReview } from "../../store/reviews";
+import { useState, useEffect } from 'react';
+import StarRating from "./StarRating";
 
-function NewReviewModal ({ spot }) {
+function NewReviewModal () {
   const { closeModal } = useModal();
   const dispatch = useDispatch();
-  const history = useHistory();
   const user = useSelector((state) => state.session.user);
-  const spot = useSelector((state) => state.session.singleSpot);
+  const spot = useSelector((state) => state.spots.singleSpot);
 
   const [reviewText, setReviewText] = useState("");
   const [stars, setStars] = useState(0);
@@ -38,33 +38,26 @@ function NewReviewModal ({ spot }) {
     closeModal();
   };
 
-  const starsOnHover = e => {
-    const chooseStars = {};
 
-    for(let i = 0; i < 6; i++) {
-      if (i <= e.target.id) {
-        chooseStars[i] = 'fa-solid fa-star picked';
-      } else {
-        chooseStars[i] = 'fa-regular fa-star';
-      }
-    };
-    let starCount = Object.values(chooseStars).length;
-    setStars(starCount);
-  };
+  return (
+    <div className="review-modal">
+      <h3>How was your stay?</h3>
+      <textarea 
+        rows={10}
+        cols={25}
+        value={reviewText}
+        onChange={(e => setReviewText(e.target.value))}
+        placeholder="Share your thoughts here..." 
+      />
+      <StarRating stars={stars} onChange={setStars} value={stars} />
+      <button
+        disabled={disableButton}
+        onClick={handleSubmit}
+        class="standard-button">
+          Submit Your Review
+        </button>
+    </div>
+  );
+};
 
-  const starsOff = e => {
-    const chooseStars = {};
-
-    for(let i = 0; i < 6; i++) {
-      if(i <= stars) {
-        chooseStars[i] = 'fa-solid fa-star picked'
-      } else {
-        chooseStars[i] = 'fa-regular fa-star'
-      }
-    }
-    let starCount = Object.values(chooseStars).length;
-    setStars(starCount);
-  };
-
-  
-}
+export default NewReviewModal;

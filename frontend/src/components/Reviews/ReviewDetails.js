@@ -1,6 +1,6 @@
-import { useDispatch, useSelector } from "react-redux";
 
 function ReviewDetails ({ spot }) {
+  const { numReviews } = spot;
   
     return (
       <div className="review-rating">

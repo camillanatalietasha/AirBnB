@@ -3,8 +3,8 @@ import { csrfFetch } from "./csrf";
 const SPOT_REVIEWS = 'reviews/SPOT_REVIEWS';
 const USER_REVIEWS = 'reviews/USER_REVIEWS';
 const ADD_REVIEW = 'reviews/ADD_REVIEW';
-const UPDATE_REVIEW = 'reviews/UPDATE_REVIEW';
-const DELETE_REVIEW = 'reviews/DELETE_REVIEW';
+// const UPDATE_REVIEW = 'reviews/UPDATE_REVIEW';
+// const DELETE_REVIEW = 'reviews/DELETE_REVIEW';
 
 // actions
 const spotReviews = reviews => {
@@ -56,14 +56,17 @@ export const thunkGetUserReviews = () => async dispatch => {
 }
 
 export const thunkAddReview = (revObj, spotId) => async dispatch => {
-    const reviewRes = await csrfFetch(`/api/spots/${spotId}/reviews`, {
+    const res = await csrfFetch(`/api/spots/${spotId}/reviews`, {
       method: "POST",
       body: JSON.stringify(revObj),
     });
-    if (reviewRes.ok) {
+
+    const review = res.json();
+
+    if (res.ok) {
       dispatch(addReview(review))
       const res = await csrfFetch(`/api/spots/${spotId}/reviews`);
-      const spotReviews = await res.json();
+      const reviews = await res.json();
       dispatch(spotReviews(reviews));
     }
 }
@@ -78,14 +81,13 @@ const reviewsReducer = (state = initialState, action) => {
     case SPOT_REVIEWS:
         const spotReviews = {}
         action.reviews.Reviews.map(rev=>{
-            spotReviews[rev.id] = rev
+            return spotReviews[rev.id] = rev
         })
         return {...newState, spot: {...spotReviews}};
     case USER_REVIEWS:
         const userReviews = {}
         action.reviews.Reviews.map(rev=>{
-            userReviews[rev.id] = rev
-        })
+            return userReviews[rev.id] = rev})
         return {...newState, user: {...userReviews}};
     default:
         return state;

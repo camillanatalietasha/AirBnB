@@ -3,10 +3,12 @@
 // add modal for post review
 // add edit review modal
 
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { thunkGetSpotReviews, thunkGetUserReviews } from '../../store/reviews';
 import ReviewDetails from './ReviewDetails';
+import OpenModalButton from "../OpenModalButton"
+import NewReviewModal from '../NewReviewModal';
 
 function Reviews({ spotId }) {
   const dispatch = useDispatch();
@@ -18,12 +20,18 @@ function Reviews({ spotId }) {
   useEffect(() => {
     dispatch(thunkGetSpotReviews(spot.id));
     dispatch(thunkGetUserReviews());
-  }, [dispatch])
+  }, [dispatch, spot.id])
 
   return (
     <>
+    {user && user.id !== spot.ownerId && !reviews.find(r => r.userId === user.id) ? 
+    (<OpenModalButton
+      modalComponent={<NewReviewModal spot={spot} />}
+      nameClass="new-review-button"
+      buttonText={'Post Your Review'}
+    />) : (<></>)}
     <div className='rating-div'>
-      <ReviewDetails spot={spot} />
+      <ReviewDetails spot={spot}/>
     </div>
     <div className='reviews-div'>
       {/* add post review button here */}
