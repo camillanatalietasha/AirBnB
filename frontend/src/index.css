@@ -46,3 +46,7 @@ button:hover {
   cursor: pointer;
   border-color: #AAAAAA;
 }
+
+img:hover {
+  cursor: pointer;
+}
