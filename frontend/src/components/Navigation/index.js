@@ -11,11 +11,11 @@ function Navigation({ isLoaded }) {
     <ul className="nav-bar">
       <NavLink exact to="/">
         <div className="logo-div">
-        <img
-          id="logo"
-          src="https://i.imgur.com/uey7u8T.png"
-          alt="space-bnb-logo"
-        />
+          <img
+            id="logo"
+            src="https://res.cloudinary.com/dvduszbet/image/upload/v1679205075/spacebnb/logonewest_digykd.png"
+            alt="space-bnb-logo"
+          />
         </div>
       </NavLink>
       {isLoaded && (
