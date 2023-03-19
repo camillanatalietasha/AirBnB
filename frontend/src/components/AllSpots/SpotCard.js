@@ -11,9 +11,13 @@ function SpotCard({ spot }) {
           <img src={`${spot.previewImage}`} alt={spot.name} />
         </div>
         <div className="spot-preview-info">
-          <h3>{spot.name}</h3>
-          <h3>{spot.price} per night</h3>
-          <span className="spot-card-ratings">{spot.avgRating}</span>
+          <p className="city-state">{spot.city}, {spot.state}</p>
+          <div className="spot-card-ratings">
+             {spot.avgRating !== null ? <p className="fa fa-star">{spot.avgRating}</p> : <p>'No reviews yet'</p>}
+          </div>
+          <div className="per-night">
+            ${spot.price} night
+            </div>
         </div>
       </Link>
     </div>

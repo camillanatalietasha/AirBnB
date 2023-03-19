@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import * as sessionActions from "../../store/session";
 import { useDispatch } from "react-redux";
+import { useHistory, Link } from 'react-router-dom';
 import { useModal } from "../../context/Modal";
 import "./LoginForm.css";
 
@@ -8,23 +9,32 @@ function LoginFormModal() {
   const dispatch = useDispatch();
   const [credential, setCredential] = useState("");
   const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState([]);
-  const [disableButton, setDisableButton] = useState(true);
+  const [errors, setErrors] = useState({});
+  const [disableButton, setDisableButton] = useState();
+  const [submitted, setSubbmited] = useState(false)
   const { closeModal } = useModal();
 
   useEffect(() => {
-    if(credential.length >= 4 && password.length >= 6) setDisableButton(false)
-    else setDisableButton(true)
-  })
+    if(credential.length <= 3 || password.length <= 5) {
+      setDisableButton(true);
+    } else {
+      setDisableButton(false);
+    }
+  },[password, credential])
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setErrors([]);
+    setSubbmited(true)
+    // if(errors.length) {
+    //   return null;
+    // }
     return dispatch(sessionActions.thunkLoginUser({ credential, password }))
       .then(closeModal)
       .catch(async (res) => {
         const data = await res.json();
-        if (data && data.errors) setErrors(data.errors);
+        if (data && data.errors) {
+          setErrors({credential: "The provided credentials were invalid."});
+        }
       });
   };
 
@@ -34,19 +44,21 @@ function LoginFormModal() {
       .catch(
         async (res) => {
           const data = await res.json();
-          if (data && data.errors) setErrors(data.errors);
         }
       );
   }
 
+  console.log(errors)
+
   return (
     <>
       <h1>Log In</h1>
+
+      {(disableButton === true && errors.length) ? <p className="errors">{errors.length}</p> : (<></>)}
+      {errors.credential ? <p className="errors">{errors.credential}</p> : (<></>)}
       <form className="session-form" onSubmit={handleSubmit}>
         <ul>
-          {errors.map((error, idx) => (
-            <li key={idx}>{error}</li>
-          ))}
+          {}
         </ul>
         <label className="session-label">
           Username or Email
@@ -75,13 +87,7 @@ function LoginFormModal() {
         >
           Log In
         </button>
-        <button 
-        className="standard-button"
-        type="button"
-        onClick={demoUser}
-        >
-          Login as Demo User
-        </button>
+        <Link onClick={demoUser} className="demo-login-link">Demo User</Link>
       </form>
     </>
   );
