@@ -1,8 +1,9 @@
 import { csrfFetch } from "./csrf";
 
 const SPOT_REVIEWS = 'reviews/SPOT_REVIEWS';
-const USER_REVIEWS = 'reviews/USER_REVIEWS';
+// const USER_REVIEWS = 'reviews/USER_REVIEWS';
 const ADD_REVIEW = 'reviews/ADD_REVIEW';
+// const DELETE_REVEIW = 'reviews/DELETE_REVIEW'
 // const UPDATE_REVIEW = 'reviews/UPDATE_REVIEW';
 // const DELETE_REVIEW = 'reviews/DELETE_REVIEW';
 
@@ -13,12 +14,12 @@ const spotReviews = reviews => {
     reviews
   }
 };
-const userReviews = reviews => {
-  return {
-    type: USER_REVIEWS,
-    reviews
-  }
-};
+// const userReviews = reviews => {
+//   return {
+//     type: USER_REVIEWS,
+//     reviews
+//   }
+// };
 const addReview = reviewObj => {
   return {
     type: ADD_REVIEW,
@@ -51,8 +52,7 @@ export const thunkGetUserReviews = () => async dispatch => {
   const res = await csrfFetch(`/api/reviews/current`);
   const reviews = await res.json();
   
-
-  dispatch(userReviews(reviews))
+  return reviews;
 }
 
 export const thunkAddReview = (revObj, spotId) => async dispatch => {
@@ -84,11 +84,11 @@ const reviewsReducer = (state = initialState, action) => {
             return spotReviews[rev.id] = rev
         })
         return {...newState, spot: {...spotReviews}};
-    case USER_REVIEWS:
-        const userReviews = {}
-        action.reviews.Reviews.map(rev=>{
-            return userReviews[rev.id] = rev})
-        return {...newState, user: {...userReviews}};
+    // case USER_REVIEWS:
+    //     const userReviews = {}
+    //     action.reviews.Reviews.map(rev=>{
+    //         userReviews[rev.id] = rev})
+    //     return {...newState, user: {...userReviews}};
     default:
         return state;
   };

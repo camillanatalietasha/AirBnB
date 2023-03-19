@@ -18,8 +18,8 @@ function Reviews({ spotId }) {
   const reviews = Object.values(spotReviews);
   
   useEffect(() => {
-    dispatch(thunkGetSpotReviews(spot.id));
     dispatch(thunkGetUserReviews());
+    dispatch(thunkGetSpotReviews(spot.id));
   }, [dispatch, spot.id])
 
   return (

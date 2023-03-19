@@ -18,6 +18,6 @@ export const nonPreviewImages = (imgObj) => {
     if(img.isPreview !== true) {
       imageArray.push(img)
     } 
-  })
   return imageArray;
+  })
 }

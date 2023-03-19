@@ -39,7 +39,6 @@ function ProfileButton({ user }) {
   };
 
   const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
-  const loggedInClass = (user ? 'loggedIn' : 'noUser')
 
   return (
     <div className="profile-container">
