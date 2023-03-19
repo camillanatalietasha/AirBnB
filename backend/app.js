@@ -5,6 +5,7 @@ const cors = require('cors'); // security
 const csurf = require('csurf'); // security, deprecated
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
+const path = require('path');
 
 // require routers
 const routes = require('./routes');
@@ -52,7 +53,7 @@ app.use(
 
 /* ------------------------- API Endpoints -------------------------- */
 app.use(routes);
-
+app.use("/static", express.static(path.join(__dirname, "assets")));
 /* ------------------------- Error handling -------------------------- */
 
 // Resource Not Found Error-Handler
