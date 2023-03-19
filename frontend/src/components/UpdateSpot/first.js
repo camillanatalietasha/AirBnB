@@ -1,37 +1,60 @@
-import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
-import { useState, useEffect } from "react";
-import { thunkCreateSpot } from "../../store/spots";
-import { validateSpot } from "../../Utilities/SpotValidation";
-import './CreateSpot.css'
+import '../CreateSpot/CreateSpot.css';
+import { useState, useEffect } from 'react';
+import { validateSpot } from '../../Utilities/SpotValidation';
+import { useSelector, useDispatch } from "react-redux";
+import { useHistory, useParams } from "react-router-dom";
+import { thunkUpdateSpot } from '../../store/spots';
 
-function CreateSpot () {
+
+function UpdateSpot () {
+  const allSpots = useSelector((state) => state.spots.currentUserSpots);
   const history = useHistory();
   const dispatch = useDispatch();
   const user = useSelector(state => state.session.user);
-
+  const spotId = useParams();
+  const spot = Object.values(allSpots)[spotId];
+  console.log(` ======= ALLSPOT ${allSpots}`)
   if(!user) history.push('/');
 
-  const [address, setAddress] = useState("");
-  const [city, setCity] = useState("");
-  const [state, setState] = useState("");
-  const [country, setCountry] = useState("");
-  const [lat, setLat] = useState("");
-  const [lng, setLng] = useState("");
-  const [name, setName] = useState("");
-  const [price, setPrice] = useState("");
-  const [description, setDescription] = useState("");
-  const [previewImage, setPreviewImage] = useState("");
-  const [imageOne, setImageOne] = useState("");
-  const [imageTwo, setImageTwo] = useState("");
-  const [imageThree, setImageThree] = useState("");
-  const [imageFour, setImageFour] = useState("");
+
+  // start the form off with the spot's current data
+  const [address, setAddress] = useState(spot.address);
+  const [city, setCity] = useState(spot.city);
+  const [state, setState] = useState(spot.state);
+  const [country, setCountry] = useState(spot.country);
+  const [lat, setLat] = useState(spot.lat);
+  const [lng, setLng] = useState(spot.lng);
+  const [name, setName] = useState(spot.name);
+  const [price, setPrice] = useState(spot.price);
+  const [description, setDescription] = useState(spot.description);
+  const [previewImage, setPreviewImage] = useState(spot.SpotImages[0].imgUrl);
+  const [imageOne, setImageOne] = useState(spot.SpotImages[1].imgUrl);
+  const [imageTwo, setImageTwo] = useState(spot.SpotImages[2].imgUrl);
+  const [imageThree, setImageThree] = useState(spot.SpotImages[3].imgUrl);
+  const [imageFour, setImageFour] = useState(spot.SpotImages[4].imgUrl);
 
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState();
 
-  useEffect(() => {
-    const spot = {
+    useEffect(() => {
+      const spot = {
+        address,
+        city,
+        state,
+        country,
+        lat,
+        lng,
+        name,
+        price,
+        description,
+        previewImage,
+        imageOne,
+        imageTwo,
+        imageThree,
+        imageFour,
+      };
+      setErrors(validateSpot(spot));
+    }, [
       address,
       city,
       state,
@@ -46,74 +69,58 @@ function CreateSpot () {
       imageTwo,
       imageThree,
       imageFour,
-    };
-    setErrors(validateSpot(spot))
-  }, [      
-      address,
-      city,
-      state,
-      country,
-      lat,
-      lng,
-      name,
-      price,
-      description,
-      previewImage,
-      imageOne,
-      imageTwo,
-      imageThree,
-      imageFour,])
+    ]);
+   const handleSubmit = async (e) => {
+     e.preventDefault();
+     setSubmitted(true);
+     if (errors.hasErr === true) return null;
 
-  const handleSubmit = async e => {
-    e.preventDefault();
-    setSubmitted(true);
-    if(errors.hasErr === true) return null;
+     const submitObj = {
+       newSpot: {
+         address,
+         city,
+         state,
+         country,
+         lat,
+         lng,
+         name,
+         price,
+         description,
+       },
+       previewImage,
+       images: {
+         imageOne,
+         imageTwo,
+         imageThree,
+         imageFour,
+       },
+     };
+     
+     const updateDone = await dispatch(thunkUpdateSpot(submitObj));
+     // reset fields
+     setAddress("");
+     setCity("");
+     setState("");
+     setCountry("");
+     setLat("");
+     setLng("");
+     setName("");
+     setPrice("");
+     setDescription("");
+     setPreviewImage("");
+     setImageOne("");
+     setImageTwo("");
+     setImageThree("");
+     setImageFour("");
+     // go to new spot page
 
+      if(updateDone) {
+        history.push(`/spots/${spot.id}`);
+      }
+   };
 
-    const submitObj = {
-      newSpot: {
-        address,
-        city,
-        state,
-        country,
-        lat,
-        lng,
-        name,
-        price,
-        description,
-      },
-      previewImage,
-      images: {
-        imageOne,
-        imageTwo,
-        imageThree,
-        imageFour
-      },
-    };
-  // dispatch for new spot id
-    const newSpotCreated = await dispatch(thunkCreateSpot(submitObj));
-  // reset fields
-    setAddress("");
-    setCity("");
-    setState("");
-    setCountry("");
-    setLat("");
-    setLng("");
-    setName("");
-    setPrice("");
-    setDescription("");
-    setPreviewImage("");
-    setImageOne("");
-    setImageTwo("");
-    setImageThree("");
-    setImageFour("");
-  // go to new spot page
-
-    if(newSpotCreated)history.push(`/spots/${newSpotCreated.id}`)
-  };
-
-  return (
-    <div className="create-spot-container">
+   return (
+     <div className="create-spot-container">
       <form id="create-spot-form">
         <h1>Create a New Spot</h1>
         <div>
@@ -144,7 +151,7 @@ function CreateSpot () {
           />
         </label>
         <label>
-          City {(submitted === true && errors.city) ? <p className="errors">{errors.city}</p> : (<></>)}
+          City {(submitted && errors.city) ? <p className="errors">{errors.city}</p> : (<></>)}
           <input
             name="city"
             type="text"
@@ -276,10 +283,10 @@ function CreateSpot () {
           value={imageFour}
           onChange={(e) => setImageFour(e.target.value)}
         />
-        <button type="submit" className="standard-button" onClick={handleSubmit}>Create</button>
+        <button type="submit" className="standard-button" onClick={handleSubmit}>Update</button>
       </form>
     </div>
   );
 };
 
-export default CreateSpot;
+export default UpdateSpot;

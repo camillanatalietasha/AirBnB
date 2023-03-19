@@ -58,7 +58,7 @@ const spotsListMaker = function (spots) {
       }
     });
     // delete the unneeded Reivews object from each spot
-    delete spot.SpotImages;
+
   });
   return Spots;
 };

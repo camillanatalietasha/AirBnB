@@ -80,8 +80,8 @@ export const thunkUpdateSpot = (updateObj, spotId) => async dispatch => {
     body: JSON.stringify(newSpot)
   });
 
-  const updatedSpotPage = await csrfFetch(`/api/spots/${spotId}`);
-  const updatedSpot = await updatedSpotPage.json();  
+  const spotRes = await csrfFetch(`/api/spots/${spotId}`);
+  const updatedSpot = await spotRes.json();  
   const { SpotImages } = updatedSpot;
   
   for (let img of SpotImages) {
@@ -133,10 +133,10 @@ export const thunkUpdateSpot = (updateObj, spotId) => async dispatch => {
     })
   }
 
-  const doneUpdatedSpotPage = await csrfFetch(`/api/spots/${spotId}`);
-  const doneUpdatedSpot = await doneUpdatedSpotPage.json();
+  const updatedRes = await csrfFetch(`/api/spots/${spotId}`);
+  const updatedSpotDone = await updatedRes.json();
 
-  dispatch(updateSpot(doneUpdatedSpot));
+  dispatch(updateSpot(updatedSpotDone));
 };
 
 export const thunkCreateSpot = (submitObj) => async dispatch => {
@@ -207,6 +207,7 @@ export const thunkUserSpots = () => async dispatch => {
   const res = await csrfFetch(`/api/spots/current`);
   const spots = await res.json();
   dispatch(userSpots(spots));
+  thunkGetSpots();
 }
 
 /* ============================================================================= */
@@ -236,9 +237,9 @@ const spotsReducer = (state = initialState, action) => {
         return newState;
     case UPDATE_SPOT:
         delete newState.allSpots[action.spot.id]
-        newState = {...newState, allSpots: {...newState.allSpots}, singleSpot: {...newState.singleSpot}}
-        newState.allSpots[action.spot.id] = {...action.spot}
-        newState.singleSpot[action.spot.id] = {...action.spot,SpotImages: [...action.spot.SpotImages]}
+        newState = {...newState, allSpots: {...newState.allSpots}}
+        newState.allSpots[action.spot.id] = action.spot
+        newState.singleSpot[action.spot.id] = action.spot
         return newState;
     case DELETE_SPOT:
         delete newState.allSpots[action.spotId]
@@ -246,7 +247,7 @@ const spotsReducer = (state = initialState, action) => {
         return newState;
     case USER_SPOTS:
         newState.currentUserSpots = {}
-        action.spots.Spots.map(spot => { newState.currentUserSpots[spot.id] = spot })
+        action.spots.Spots.map(spot => { return newState.currentUserSpots[spot.id] = {...spot, SpotImages: {...spot.SpotImages}} })
         return newState;
     default:
         return state;

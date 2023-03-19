@@ -1,35 +1,48 @@
-import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
-import { useState, useEffect } from "react";
-import { thunkCreateSpot } from "../../store/spots";
-import { validateSpot } from "../../Utilities/SpotValidation";
-import './CreateSpot.css'
+import { thunkUpdateSpot, thunkOneSpot } from '../../store/spots';
+import { useState, useEffect} from 'react';
+import { useDispatch } from 'react-redux';
+import { validateSpot } from '../../Utilities/SpotValidation';
+import { useHistory, useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { findObjInObj, nonPreviewImages } from '../../Utilities/Find';
+import '../CreateSpot/CreateSpot.css';
 
-function CreateSpot () {
+function UpdateSpotForm () {
   const history = useHistory();
   const dispatch = useDispatch();
   const user = useSelector(state => state.session.user);
-
+  const routeParams = useParams();
+  const spotId = Number(routeParams.spotId);
+  // const spotId = useParams();
+  const allUserSpots = useSelector((state) => state.spots.currentUserSpots)
   if(!user) history.push('/');
+  // const spotsObj = Object.values(allUserSpots)[spotId - 1];
+  // const spot = spotsObj.find(obj => obj.id === spotId)
+  const spot = findObjInObj(allUserSpots, spotId);
+  const imgObj = spot.SpotImages;
+  const imgArray = nonPreviewImages(imgObj);
 
-  const [address, setAddress] = useState("");
-  const [city, setCity] = useState("");
-  const [state, setState] = useState("");
-  const [country, setCountry] = useState("");
-  const [lat, setLat] = useState("");
-  const [lng, setLng] = useState("");
-  const [name, setName] = useState("");
-  const [price, setPrice] = useState("");
-  const [description, setDescription] = useState("");
-  const [previewImage, setPreviewImage] = useState("");
-  const [imageOne, setImageOne] = useState("");
-  const [imageTwo, setImageTwo] = useState("");
-  const [imageThree, setImageThree] = useState("");
-  const [imageFour, setImageFour] = useState("");
+
+  const [address, setAddress] = useState(spot.address);
+  const [city, setCity] = useState(spot.city);
+  const [state, setState] = useState(spot.state);
+  const [country, setCountry] = useState(spot.country);
+  const [lat, setLat] = useState(spot.lat);
+  const [lng, setLng] = useState(spot.lng);
+  const [name, setName] = useState(spot.name);
+  const [price, setPrice] = useState(spot.price);
+  const [description, setDescription] = useState(spot.description);
+  const [previewImage, setPreviewImage] = useState(spot.previewImage);
+  const [imageOne, setImageOne] = useState(imgArray[0] ? imgArray[0].imgUrl : "");
+  const [imageTwo, setImageTwo] = useState(imgArray[1] ? imgArray[1].imgUrl : "");
+  const [imageThree, setImageThree] = useState(imgArray[2] ? imgArray[2].imgUrl : "");
+  const [imageFour, setImageFour] = useState(imgArray[3] ? imgArray[3].imgUrl : "");
+  
 
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState();
 
+  // useEffect to monitor inputs for errors
   useEffect(() => {
     const spot = {
       address,
@@ -64,6 +77,9 @@ function CreateSpot () {
       imageThree,
       imageFour,])
 
+      console.log(errors)
+
+  // submit changes
   const handleSubmit = async e => {
     e.preventDefault();
     setSubmitted(true);
@@ -90,32 +106,19 @@ function CreateSpot () {
         imageFour
       },
     };
-  // dispatch for new spot id
-    const newSpotCreated = await dispatch(thunkCreateSpot(submitObj));
-  // reset fields
-    setAddress("");
-    setCity("");
-    setState("");
-    setCountry("");
-    setLat("");
-    setLng("");
-    setName("");
-    setPrice("");
-    setDescription("");
-    setPreviewImage("");
-    setImageOne("");
-    setImageTwo("");
-    setImageThree("");
-    setImageFour("");
-  // go to new spot page
 
-    if(newSpotCreated)history.push(`/spots/${newSpotCreated.id}`)
+    const spotUpdated = dispatch(thunkUpdateSpot(submitObj, spotId));
+
+
+      dispatch(thunkOneSpot(spotId))
+      history.push(`/spots/${spotId}`)
+
   };
 
   return (
-    <div className="create-spot-container">
-      <form id="create-spot-form">
-        <h1>Create a New Spot</h1>
+    <div className="update-spot-container">
+      <form id="update-spot-form">
+        <h1>Update Spot</h1>
         <div>
           <h3>Where's your place located?</h3>
           <p>
@@ -128,7 +131,7 @@ function CreateSpot () {
           <input
             name="country"
             type="text"
-            placeholder="..."
+
             value={country}
             onChange={(e) => setCountry(e.target.value)}
           />
@@ -138,7 +141,7 @@ function CreateSpot () {
           <input
             name="address"
             type="text"
-            placeholder="..."
+
             value={address}
             onChange={(e) => setAddress(e.target.value)}
           />
@@ -148,17 +151,17 @@ function CreateSpot () {
           <input
             name="city"
             type="text"
-            placeholder="..."
+
             value={city}
             onChange={(e) => setCity(e.target.value)}
           />
         </label>
         <label>
-          State {(submitted && errors.state) ? <p className="errors">{errors.state}</p> : (<></>)}
+          State {(errors.state) ? <p className="errors">{errors.state}</p> : (<></>)}
           <input
             name="state"
             type="text"
-            placeholder="..."
+
             value={state}
             onChange={(e) => setState(e.target.value)}
           />
@@ -168,7 +171,7 @@ function CreateSpot () {
           <input
             name="lat"
             type="number"
-            placeholder="..."
+
             value={lat}
             onChange={(e) => setLat(e.target.value)}
              />
@@ -178,7 +181,7 @@ function CreateSpot () {
           <input
             name="lng"
             type="number"
-            placeholder="..."
+
             value={lng}
             onChange={(e) => setLng(e.target.value)}
              />
@@ -191,12 +194,11 @@ function CreateSpot () {
               like fast wif or parking, and what you love about the
               neighborhood.
             </p>
-            {(submitted === true && errors.description) ? <p className="errors">{errors.description}</p> : (<></>)}
+            {(errors.description) ? <p className="errors">{errors.description}</p> : (<></>)}
           </div>
           <textarea
             name="description"
             rows="10"
-            placeholder="..."
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
@@ -207,12 +209,12 @@ function CreateSpot () {
             Catch guests' attention with a spot title that highlights what makes
             your place special.
           </p>
-          {(submitted === true && errors.title) ? <p className="errors">{errors.title}</p> : (<></>)}
+          {(errors.name) ? <p className="errors">{errors.name}</p> : (<></>)}
         </div>
         <input
           name="name"
           type="text"
-          placeholder="..."
+
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
@@ -222,12 +224,12 @@ function CreateSpot () {
             Competitive pricing can help your listing stand out and rank higher
             in search results.
           </p>
-          {(submitted === true && errors.price) ? <p className="errors">{errors.price}</p> : (<></>)}
+          {(errors.price) ? <p className="errors">{errors.price}</p> : (<></>)}
         </div>
         <input
           name="price"
           type="text"
-          placeholder="price per night (USD)"
+
           value={price}
           onChange={(e) => setPrice(e.target.value)}
         />
@@ -235,51 +237,50 @@ function CreateSpot () {
           <h3>Liven up your spot with photos</h3>
           <p>Submit a link to at least one photo to publish your spot</p>
         </div>
-        {(submitted === true && errors.previewImage) ? <p className="errors">{errors.previewImage}</p> : (<></>)}
+        {(errors.previewImage) ? <p className="errors">{errors.previewImage}</p> : (<></>)}
         <input
           name="previewImage"
           type="text"
-          placeholder="preview image url"
+
           value={previewImage}
           required={true}
           onChange={(e) => setPreviewImage(e.target.value)}
         />
-        {(submitted === true && errors.imageOne) ? <p className="errors">{errors.imageOne}</p> : (<></>)}
+        {(errors.imageOne) ? <p className="errors">{errors.imageOne}</p> : (<></>)}
         <input
           name="imageOne"
           type="text"
-          placeholder="image url"
+
           value={imageOne}
           onChange={(e) => setImageOne(e.target.value)}
         />
-        {(submitted === true && errors.imageTwo) ? <p className="errors">{errors.imageTwo}</p> : (<></>)}
+        {(errors.imageTwo) ? <p className="errors">{errors.imageTwo}</p> : (<></>)}
         <input
           name="imageTwo"
           type="text"
-          placeholder="image url"
+
           value={imageTwo}
           onChange={(e) => setImageTwo(e.target.value)}
         />
-        {(submitted === true && errors.imageThree) ? <p className="errors">{errors.imageThree}</p> : (<></>)}
+        {(errors.imageThree) ? <p className="errors">{errors.imageThree}</p> : (<></>)}
         <input
           name="imageThree"
           type="text"
-          placeholder="image url"
+
           value={imageThree}
           onChange={(e) => setImageThree(e.target.value)}
         />
-        {(submitted === true && errors.imageFour) ? <p className="errors">{errors.imageFour}</p> : (<></>)}
+        {(errors.imageFour) ? <p className="errors">{errors.imageFour}</p> : (<></>)}
         <input
           name="imageFour"
           type="text"
-          placeholder="image url"
+
           value={imageFour}
           onChange={(e) => setImageFour(e.target.value)}
         />
-        <button type="submit" className="standard-button" onClick={handleSubmit}>Create</button>
+        <button type="submit" className="standard-button" onClick={handleSubmit}>Update</button>
       </form>
     </div>
   );
 };
-
-export default CreateSpot;
+export default UpdateSpotForm;
