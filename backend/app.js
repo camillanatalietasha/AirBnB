@@ -53,7 +53,7 @@ app.use(
 
 /* ------------------------- API Endpoints -------------------------- */
 app.use(routes);
-app.use("/static", express.static(path.join(__dirname, "assets")));
+
 /* ------------------------- Error handling -------------------------- */
 
 // Resource Not Found Error-Handler
