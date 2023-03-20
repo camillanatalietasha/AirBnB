@@ -6,6 +6,7 @@ import { useModal } from "../../context/Modal";
 import "./LoginForm.css";
 
 function LoginFormModal() {
+  const history = useHistory();
   const dispatch = useDispatch();
   const [credential, setCredential] = useState("");
   const [password, setPassword] = useState("");
@@ -30,6 +31,7 @@ function LoginFormModal() {
     // }
     return dispatch(sessionActions.thunkLoginUser({ credential, password }))
       .then(closeModal)
+      .then(history.push('/'))
       .catch(async (res) => {
         const data = await res.json();
         if (data && data.errors) {
@@ -38,17 +40,17 @@ function LoginFormModal() {
       });
   };
 
-  const demoUser = () => {
-    return dispatch(sessionActions.thunkLoginUser( {credential: "Demo-lition", password: "pass1234"}))
+  const demoUserLogin = async (e) => {
+    e.preventDefault();
+    return dispatch(sessionActions.thunkLoginUser( {credential: "demo@demo.com", password: "pass1234"}))
       .then(closeModal)
-      .catch(
-        async (res) => {
-          const data = await res.json();
-        }
-      );
-  }
+      .then(history.push('/'))
+      .catch(async (res) => {
+        const data = await res.json()
+        console.log(data)
+      })
 
-  console.log(errors)
+  }
 
   return (
     <>
@@ -87,7 +89,7 @@ function LoginFormModal() {
         >
           Log In
         </button>
-        <Link onClick={demoUser} id="demo-login-link" className="link">Demo User</Link>
+        <Link onClick={demoUserLogin} id="demo-login-link" className="link">Demo User</Link>
       </form>
     </>
   );
