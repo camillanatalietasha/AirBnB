@@ -30,6 +30,8 @@ function NewReviewModal () {
     setSubmitted(true);
     
     const submitObj = {
+      spotId: spot.id,
+      userId: user.id,
       review: reviewText,
       stars: stars
     };

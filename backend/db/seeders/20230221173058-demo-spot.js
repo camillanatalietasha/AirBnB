@@ -16,7 +16,7 @@ module.exports = {
           hostId: 1,
           address: "62 Space Station",
           city: "Voyager",
-          state: "Copernican System",
+          state: "Copernican",
           country: "Milky Way Galaxy",
           lat: 40.210831,
           lng: -105.286264,

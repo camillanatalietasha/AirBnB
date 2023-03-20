@@ -3,9 +3,9 @@ import { csrfFetch } from "./csrf";
 const SPOT_REVIEWS = 'reviews/SPOT_REVIEWS';
 // const USER_REVIEWS = 'reviews/USER_REVIEWS';
 const ADD_REVIEW = 'reviews/ADD_REVIEW';
-// const DELETE_REVEIW = 'reviews/DELETE_REVIEW'
+const DELETE_REVIEW = 'reviews/DELETE_REVIEW';
 // const UPDATE_REVIEW = 'reviews/UPDATE_REVIEW';
-// const DELETE_REVIEW = 'reviews/DELETE_REVIEW';
+
 
 // actions
 const spotReviews = reviews => {
@@ -32,12 +32,12 @@ const addReview = reviewObj => {
 //     reviews
 //   }
 // };
-// const deleteReview = reviewId => {
-//   return {
-//     type: DELETE_REVIEW,
-//     reviews
-//   }
-// };
+const deleteReview = reviewId => {
+  return {
+    type: DELETE_REVIEW,
+    reviewId
+  }
+};
 
 // thunks 
 
@@ -53,7 +53,13 @@ export const thunkGetUserReviews = () => async dispatch => {
   const reviews = await res.json();
   
   return reviews;
-}
+};
+export const thunkDeleteReview = (reviewId) => async dispatch => {
+  const res = await csrfFetch(`/api/reviews/${reviewId}`, {
+    method: 'DELETE'
+  });
+  dispatch(deleteReview(reviewId));
+};
 
 export const thunkAddReview = (revObj, spotId) => async dispatch => {
     const res = await csrfFetch(`/api/spots/${spotId}/reviews`, {
@@ -68,8 +74,11 @@ export const thunkAddReview = (revObj, spotId) => async dispatch => {
       const res = await csrfFetch(`/api/spots/${spotId}/reviews`);
       const reviews = await res.json();
       dispatch(spotReviews(reviews));
-    }
-}
+    };
+};
+
+
+
 
 /*======================================================*/ 
 const initialState = { spot: {}, user: {} }
@@ -84,11 +93,10 @@ const reviewsReducer = (state = initialState, action) => {
             return spotReviews[rev.id] = rev
         })
         return {...newState, spot: {...spotReviews}};
-    // case USER_REVIEWS:
-    //     const userReviews = {}
-    //     action.reviews.Reviews.map(rev=>{
-    //         userReviews[rev.id] = rev})
-    //     return {...newState, user: {...userReviews}};
+    case DELETE_REVIEW:
+        delete newState.spot[action.reviewId];
+        newState = {...newState, spot: {...newState.singleSpot[action.reviewId]}}
+        return newState;
     default:
         return state;
   };

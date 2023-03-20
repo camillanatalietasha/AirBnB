@@ -210,7 +210,9 @@ router.get("/:spotId", async (req, res) => {
   await Review.count({ where: { "spotId": spotId}})
     .then(c => { allSpotDetails.numReviews = c });
   await Review.sum('stars', { where: { "spotId": spotId }})
-    .then(s => { allSpotDetails.avgStarRating = s / allSpotDetails.numReviews });
+    .then(s => { 
+      Math.round((allSpotDetails.avgStarRating = s / allSpotDetails.numReviews)*100)/100
+      });
   await SpotImage.findAll({where: { spotId: spotId }})
     .then(i => {allSpotDetails.SpotImages = i});
   let owner = await Spot.findByPk(spotId, {

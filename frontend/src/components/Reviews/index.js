@@ -1,8 +1,3 @@
-// TODO 
-// create reviews reducers add get all reviews for spot
-// add modal for post review
-// add edit review modal
-
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { thunkGetSpotReviews, thunkGetUserReviews } from '../../store/reviews';
@@ -10,6 +5,8 @@ import OpenModalButton from "../OpenModalButton"
 import NewReviewModal from '../NewReviewModal';
 import getDateFormat from '../../Utilities/GetDateFormat';
 import './Reviews.css'
+import { thunkDeleteReview } from '../../store/reviews';
+import { useHistory } from 'react-router-dom';
 
 function Reviews({ spotId }) {
   const dispatch = useDispatch();
@@ -17,6 +14,7 @@ function Reviews({ spotId }) {
   const spot = useSelector(state => state.spots.singleSpot);
   const spotReviews = useSelector(state => state.reviews.spot);
   const reviews = Object.values(spotReviews);
+  const history = useHistory();
   
   useEffect(() => {
     dispatch(thunkGetUserReviews());
@@ -24,8 +22,9 @@ function Reviews({ spotId }) {
   }, [dispatch, spot.id])
 
   const deleteReview = async (e) => {
-    e.preventDefault;
-    // await dispatch(deleteReview)
+    e.preventDefault();
+    await dispatch(thunkDeleteReview(e.target.name));
+    history.push(`/spots/${spot.id}`)
   }
 
   return (
@@ -66,7 +65,7 @@ function Reviews({ spotId }) {
         {/* add post review button here */}
         {spotReviews &&
           reviews.map((r) => (
-            <div key="r.id" className="one-review">
+            <div key={r.id} className="one-review">
               <h3>{r?.User?.firstName}</h3>
               <p className="review-date">{getDateFormat(r.createdAt)}</p>
               <p className="review-text">{r.review}</p>
@@ -74,12 +73,7 @@ function Reviews({ spotId }) {
               {/* add edit review for logged in user */}
               {user && user.id === r.userId?(
                 <div className='edit-delete-review'>
-                  <button name={r.id} className='standard-button' onClick=  {deleteReview}>Delete</button>
-                  <OpenModalButton
-                  buttonText={"update"}
-                  nameClass={'standard-button'}
-                  modalComponent={<EditReviewModal reviewId={r.id}/>}
-                  />
+                  <button name={r.id} className='standard-button' onClick={deleteReview}>Delete</button>
                   </div>
                   ):(<></>)}
               <hr id="line-rev"></hr>
