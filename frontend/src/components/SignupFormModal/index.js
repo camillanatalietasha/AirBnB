@@ -40,7 +40,7 @@ function SignupFormModal() {
   };
 
   return (
-    <>
+    <div className="form-content">
       <h1>Sign Up</h1>
       <form onSubmit={handleSubmit}>
         <ul>
@@ -64,7 +64,7 @@ function SignupFormModal() {
             required
           />
         </label>
-        <label>
+        <label >
           First Name
           <input
             type="text"
@@ -73,7 +73,7 @@ function SignupFormModal() {
             required
           />
         </label>
-        <label>
+        <labe >
           Last Name
           <input
             type="text"
@@ -81,7 +81,7 @@ function SignupFormModal() {
             onChange={(e) => setLastName(e.target.value)}
             required
           />
-        </label>
+        </labe>
         <label>
           Password
           <input
@@ -91,7 +91,7 @@ function SignupFormModal() {
             required
           />
         </label>
-        <label>
+        <label i>
           Confirm Password
           <input
             type="password"
@@ -100,9 +100,9 @@ function SignupFormModal() {
             required
           />
         </label>
-        <button type="submit">Sign Up</button>
+        <button id="b" type="submit">Sign Up</button>
       </form>
-    </>
+    </div>
   );
 }
 

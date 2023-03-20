@@ -1,1 +1,35 @@
 /* TODO add css */
+.form-content {
+  padding: 30px;
+  display: grid;
+  grid-template-areas: 
+    "h"
+    "form"
+    "b";
+}
+
+h1 {
+  text-align: center;
+  grid-area: h;
+}
+
+
+label {
+  text-align: left;
+}
+
+#b {
+  align-self: center;
+}
+
+form {
+  display: flex;
+  align-items: stretch;
+  align-content: stretch;
+}
+
+input {
+  width: 100%;
+  padding-right: 20%;
+  margin-right: 20%;
+}

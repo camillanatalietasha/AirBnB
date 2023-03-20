@@ -52,9 +52,9 @@ function LoginFormModal() {
   return (
     <>
       <h1>Log In</h1>
-
       {(disableButton === true && errors.length) ? <p className="errors">{errors.length}</p> : (<></>)}
       {errors.credential ? <p className="errors">{errors.credential}</p> : (<></>)}
+      <div className="form-content">
       <form className="session-form" onSubmit={handleSubmit}>
         <ul>
           {}
@@ -80,6 +80,8 @@ function LoginFormModal() {
           />
         </label>
         <button 
+        id="b"
+        class={disableButton === true ? "disabled" : "not-disabled"}
         className="standard-button" 
         type="submit"
         disabled={disableButton}
@@ -88,6 +90,7 @@ function LoginFormModal() {
         </button>
         <Link onClick={demoUserLogin} id="demo-login-link" className="link">Demo User</Link>
       </form>
+      </div>
     </>
   );
 }
