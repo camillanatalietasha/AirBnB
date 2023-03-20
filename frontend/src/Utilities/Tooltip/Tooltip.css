@@ -1,0 +1,31 @@
+:root {
+  --tooltip-margin: 30px;
+  --tooltip-text-color: #eef2ff;
+  --tooltip-background-color: #e7425beb;
+}
+
+.tooltip-div {
+  display: inline-block;
+  position: relative;
+}
+
+.tool-tip {
+  position: absolute;
+  border-radius: 3px;
+  padding: 5px;
+  color: var(--tooltip-text-color);
+  background: var(--tooltip-background-color);
+  font-size: 14px;
+  letter-spacing: 1.5px;
+  z-index: 100;
+  top: calc(var(--tooltip-margin) * -.5);
+}
+
+.tool-tip::before {
+  content: "";
+  pointer-events: none;
+  height: 0;
+  width: 0;
+  position: absolute;
+  border: solid transparent;
+}

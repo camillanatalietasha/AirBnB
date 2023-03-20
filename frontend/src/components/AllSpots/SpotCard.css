@@ -1,20 +1,32 @@
+
+
 .spot-card {
+  line-height: 20px;
+  text-decoration: none solid;
+  color: black;
   position: relative;
-  /* width: 275px;
-  height: 275px; */
+  width: 315px;
+  height: 395px;
   border-radius: 10px;
   box-shadow: 0px, 5px, 5px, #8b8c89;
-  padding: 15px;
+  padding-bottom: 15px;
   text-decoration: none;
+  color: black;
 }
 
-.spot-card-img {
-    border-top-right-radius: 8px;
-    border-top-left-radius: 8px;
-    width: 98%;
-    height: 18rem;
+.spot-card:hover {
+  box-shadow: ;
+}
+
+.prev-img {
+    border-radius: 11px;
+    width: 315px;
+    height: 295px;
     object-fit: cover;
 }
+
+
+
 
 .spot-card-ratings {
   padding: 5px;
