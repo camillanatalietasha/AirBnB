@@ -1,0 +1,38 @@
+.reviews-summary {
+  /* font-size: 30em; */
+  height: 100%;
+  width: 100%;
+}
+
+
+
+.review-modal-button {
+  background-color: rgb(99, 99, 99);
+}
+
+#total-review,
+#no-reviews,
+#dot,
+.review-counter {
+  font-size: 20px;
+  padding-bottom: 20px;
+}
+
+.reviews-div {
+  margin-top: 20px;
+  margin-left: 15px;
+  font-size: 14px;
+  width: 70%;
+
+}
+
+#line-rev {
+    border: 0;
+    height: 2px;
+    background: #333;
+    background-image: linear-gradient(to right, #ccc, #333, #ccc);
+    margin-bottom: 25px;
+}
+
+
+

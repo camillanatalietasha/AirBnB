@@ -4,16 +4,18 @@
 
 
 .nav-bar {
+  box-sizing: border-box;
   top: 0px;
   display: flex;
   align-items: center;
   z-index: 1;
   justify-content: space-between;
   list-style: none;
-  padding: 15px 40px;
+  padding: 20px 40px;
   position:sticky;
-  background-color: rgba(238, 242, 255, 1);
-  border-bottom: solid 3px #3371a1;
+  /* background-color: #eef2ff; */
+  background-image: linear-gradient(to bottom, #eef2ff 20%, #c0d8eb);
+  /* border-bottom: solid 10px #3371a1; */
   color: #000;
 }
 
@@ -82,19 +84,6 @@
 }
 
 
-.nav-bar {
-  top: 0px;
-  display: flex;
-  align-items: center;
-  z-index: 1;
-  justify-content: space-between;
-  list-style: none;
-  padding: 15px 40px;
-  position:sticky;
-  background-color: rgba(238, 242, 255, 1);
-  border-bottom: solid 1px #3371a1;
-  color: #000;
-}
 
 .profile-container {
   display: flex;

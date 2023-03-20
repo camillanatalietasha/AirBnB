@@ -15,7 +15,7 @@
   box-sizing: border-box;
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(4, 1fr);
-  /* grid-gap: 20px; */
+  gap: calc(1% + 10px);
   margin: 60px;
   justify-items: center;
   align-items: center;

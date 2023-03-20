@@ -14,23 +14,20 @@ h1 {
 }
 
 
-label {
-  text-align: left;
-}
-
 #b {
+  font-size: 1.25em;
   align-self: center;
-  margin: 5%
+  width: 100%;
+  margin: 5%;
 }
 
 form {
   display: flex;
-  align-items: stretch;
-  align-content: stretch;
   font-size: 1.3em;
 }
 
 input {
+  text-align: left;
   width: 100%;
   padding-right: 20%;
   margin-right: 20%;
@@ -42,6 +39,7 @@ input {
 
 #demo-login-link:hover {
   text-shadow: #3371a17f .5px .5px 10px;
+  text-decoration: underline;
 }
 
 .disabled {

@@ -4,6 +4,7 @@ import { thunkOneSpot } from "../../store/spots";
 import { thunkAddReview } from "../../store/reviews";
 import { useState, useEffect } from 'react';
 import StarRating from "./StarRating";
+import './NewReviewModal.css'
 
 function NewReviewModal () {
   const { closeModal } = useModal();
@@ -53,7 +54,7 @@ function NewReviewModal () {
       <button
         disabled={disableButton}
         onClick={handleSubmit}
-        class="standard-button">
+        id="review-submit-button">
           Submit Your Review
         </button>
     </div>
