@@ -4,3 +4,27 @@
     padding: 5px;
 }
 
+.review-modal {
+    padding: 30px;
+  display: grid;
+  grid-template-areas: 
+    "h"
+    "form"
+    "b";
+}
+
+.review-header {
+    text-align: center;
+  grid-area: h;
+  font-size: 2em;
+  padding-bottom: 10px;
+}
+
+#review-submit-button {
+  width: 100%
+}
+
+#stars-pick {
+  text-align: center;
+  font-size: 1.5em;
+}

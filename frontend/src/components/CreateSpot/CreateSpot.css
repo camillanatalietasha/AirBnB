@@ -2,3 +2,46 @@
   font-size: 12px;
   color: red;
 }
+
+.create-spot-container {
+  margin-left: 30%;
+  margin-right: 30%;
+
+}
+
+#create-spot-title {
+  text-align: center;
+  padding-top: -10px;
+  padding-bottom: 20px;
+}
+
+.form-section {
+  font-size: 1.4em;
+}
+
+#create-spot-form {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-content: space-around;
+  align-items: stretch;
+}
+
+
+
+.stretch {
+  width: 100%;
+}
+
+.line {
+      border: 0;
+    height: 3px;
+    background: #333;
+    background-image: linear-gradient(to right, #ccc, #333, #ccc);
+    margin-bottom: 25px;
+}
+
+.double {
+  display: flex;
+  align-content: stretch;
+}

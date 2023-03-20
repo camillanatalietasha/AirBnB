@@ -44,7 +44,7 @@ function NewReviewModal () {
 
   return (
     <div className="review-modal">
-      <h3>How was your stay?</h3>
+      <h3 className="review-header">How was your stay?</h3>
       <textarea 
         rows={10}
         cols={25}
@@ -52,7 +52,10 @@ function NewReviewModal () {
         onChange={(e => setReviewText(e.target.value))}
         placeholder="Share your thoughts here..." 
       />
+      <div id="stars-pick">
+
       <StarRating stars={stars} onChange={setStars} value={stars} />
+      </div>
       <button
         disabled={disableButton}
         onClick={handleSubmit}
