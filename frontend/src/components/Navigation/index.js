@@ -13,7 +13,7 @@ function Navigation({ isLoaded }) {
         <div className="logo-div">
           <img
             id="logo"
-            src="https://res.cloudinary.com/dvduszbet/image/upload/v1679207368/spacebnb/docs/models.png"
+            src="https://raw.githubusercontent.com/camillanatalietasha/SpaceBnB/main/frontend/src/media/images/logonewest.png"
             alt="space-bnb-logo"
           />
         </div>
