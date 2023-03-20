@@ -17,6 +17,7 @@ body {
 
 .fa-star {
   font-size: .75em;
+  letter-spacing: 3px;
 }
 
 .link {
@@ -24,10 +25,9 @@ body {
   text-decoration: none;
 }
 
-.hover-link:hover {
+.link.pointer {
   cursor: pointer;
 }
-
 
 /* form styling */
 
@@ -54,11 +54,4 @@ button {
 		background-color: tranparent;
 }
 
-button:hover {
-  cursor: pointer;
-  border-color: #AAAAAA;
-}
 
-img:hover {
-  cursor: pointer;
-}

@@ -1,12 +1,15 @@
 
 
 .spot-card {
+  box-sizing: border-box;
   line-height: 20px;
   text-decoration: none solid;
   color: black;
   position: relative;
-  width: 315px;
-  height: 395px;
+  max-width: 315px;
+  max-height: 395px;
+  width: auto;
+  height: auto;
   border-radius: 10px;
   box-shadow: 0px, 5px, 5px, #8b8c89;
   padding-bottom: 15px;
@@ -15,7 +18,8 @@
 }
 
 .spot-card:hover {
-  box-shadow: ;
+  cursor: pointer;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px;
 }
 
 .prev-img {
@@ -23,21 +27,41 @@
     width: 315px;
     height: 295px;
     object-fit: cover;
+    aspect-ratio: 1 / 1;
 }
 
+.per-night {
+  padding: 5px 30px 5px 5px;
+}
 
-
+.city-state {
+  padding: 5px 20px 5px 5px
+}
 
 .spot-card-ratings {
-  padding: 5px;
+  display: block;
+  padding: 5px 5px 5px 30px;
   font-size: 1.2em;
+  align-self: flex-end;
+}
+
+#dollars {
+  font-weight: 900;
+}
+
+#new {
+  font-weight: bold;
+  font-size: 0.9em;
 }
 
 .spot-preview-info {
   font-size: 1.25em;
   display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
+  align-content: normal;
   padding: 5px;
 }
 
@@ -46,3 +70,12 @@
   justify-content: flex-end;
   width: 100%;
 }
+
+@media only screen and (max-width: 1300px) {
+  .prev-img {
+    min-width: 268px;
+    min-height: 251px;
+    aspect-ratio: 1 / 1;
+  }
+}
+

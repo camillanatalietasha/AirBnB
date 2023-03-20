@@ -14,13 +14,20 @@ function SpotCard({ spot }) {
           </Tooltip>
         </div>
         <div className="spot-preview-info">
-          <p className="city-state">{spot.city}, {spot.state}</p>
+          <p className="city-state">
+            {spot.city}, {spot.state}
+          </p>
+
           <div className="spot-card-ratings">
-             {spot.avgRating !== null ? <p className="fa fa-star">{spot.avgRating}</p> : <p id="new">New!</p>}
+            {spot.avgRating !== null ? (
+              <p className="fa fa-star">{spot.avgRating}</p>
+            ) : (
+              <p id="new">New!</p>
+            )}
           </div>
           <div className="per-night">
-            ${spot.price} night
-            </div>
+            <span id="dollars">${spot.price}</span> night
+          </div>
         </div>
       </Link>
     </div>
