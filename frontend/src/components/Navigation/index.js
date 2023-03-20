@@ -8,22 +8,26 @@ function Navigation({ isLoaded }) {
   const sessionUser = useSelector((state) => state.session.user);
 
   return (
-    <ul className="nav-bar">
-      <NavLink exact to="/">
-        <div className="logo-div">
-          <img
-            id="logo"
-            src="https://raw.githubusercontent.com/camillanatalietasha/SpaceBnB/main/frontend/src/media/images/logonewest.png"
-            alt="space-bnb-logo"
-          />
-        </div>
-      </NavLink>
+    <div className="background">
+    <div className="nav-bar">
+      <ul className="logo-create-menu">
+        <NavLink exact to="/">
+          <div className="logo-div">
+            <img
+              id="logo"
+              src="https://raw.githubusercontent.com/camillanatalietasha/SpaceBnB/main/frontend/src/media/images/logonewest.png"
+              alt="space-bnb-logo"
+            />
+          </div>
+        </NavLink>
+      </ul>
       {isLoaded && (
         <li>
           <ProfileButton user={sessionUser} />
         </li>
       )}
-    </ul>
+    </div>
+    </div>
   );
 }
 

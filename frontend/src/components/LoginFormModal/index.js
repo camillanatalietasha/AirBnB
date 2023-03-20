@@ -12,7 +12,7 @@ function LoginFormModal() {
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
   const [disableButton, setDisableButton] = useState();
-  const [submitted, setSubbmited] = useState(false)
+
   const { closeModal } = useModal();
 
   useEffect(() => {
@@ -25,10 +25,7 @@ function LoginFormModal() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setSubbmited(true)
-    // if(errors.length) {
-    //   return null;
-    // }
+
     return dispatch(sessionActions.thunkLoginUser({ credential, password }))
       .then(closeModal)
       .then(history.push('/'))

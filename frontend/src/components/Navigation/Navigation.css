@@ -2,6 +2,7 @@
     display: none;
 }
 
+
 .nav-bar {
   top: 0px;
   display: flex;
@@ -12,40 +13,54 @@
   padding: 15px 40px;
   position:sticky;
   background-color: rgba(238, 242, 255, 1);
+  border-bottom: solid 3px #3371a1;
   color: #000;
-  border-bottom: solid 2px #C5C3C6;
 }
 
-.profile
+.profile-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
-.profile-dropdown {
+#create-spot-link-nav {
+  margin-right: 40px;
+  font-size: 1.25em;
+}
+
+#create-spot-link-nav:hover {
+    text-shadow: #3371a17f .5px .5px 10px;
+}
+
+.menu-option {
   position: absolute;
-  background-color: rgb(255, 255, 255);
-  border: 1px solid #000;
+  font-size: 1.25em;
+  display: inline-flex;
+  flex-direction: column;
+  background-color: rgba(238, 242, 255, 1);
+  border: 1px solid #3371a1;
+  border-top: none;
   list-style: none;
-  padding-left: 10px;
+  justify-items: center;
+  align-items: center;
+  padding: 10px;
+  padding-left: 20px;
   top: 80px;
   right: 15px;
-  border-radius: 7px;
+  border-radius: 12px;
   border-top-right-radius: 0px;
   border-top-left-radius: 0px;
-  width: 200px
+  width: 200px;
+  margin-top: 13px;
 }
 
-.profile-dropdown li {
-  	float: left;
-		list-style: none;
-		padding: 22px 18px;
-		border: 1px solid #DCE0E0;
-		height: 61px;
-		font-size: 14px;
-		border-left-color: transparent;
-		border-bottom-color: transparent;
-		border-top: none;
+#greeting {
+  font-style: oblique;
 }
+
 
 #profile-icon {
-    font-size: 4em;
+    font-size: 3em;
     border-radius: 15px;
     padding: 5px;
     background-color:none;
@@ -55,7 +70,96 @@
   position: relative;
   top: 5px;
   margin-left: -2px;
-  height: 6em
+  height: 5em;
+  width: 100%;
 }
 
+
+/* =========== */
+
+.hidden {
+    display: none;
+}
+
+
+.nav-bar {
+  top: 0px;
+  display: flex;
+  align-items: center;
+  z-index: 1;
+  justify-content: space-between;
+  list-style: none;
+  padding: 15px 40px;
+  position:sticky;
+  background-color: rgba(238, 242, 255, 1);
+  border-bottom: solid 1px #3371a1;
+  color: #000;
+}
+
+.profile-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#create-spot-link-nav {
+  margin-right: 40px;
+  font-size: 1.25em;
+}
+
+#create-spot-link-nav:hover {
+    text-shadow: #3371a17f .5px .5px 10px;
+}
+
+
+/* 
+.menu-option {
+  position: absolute;
+  display: inline-flex;
+  flex-direction: column;
+  background-color: rgba(238, 242, 255, 1);
+  border: 1px solid #3371a1;
+  border-top: none;
+  list-style: none;
+  justify-items: center;
+  align-items: center;
+  padding: 10px;
+  padding-left: 20px;
+  top: 80px;
+  right: 15px;
+  border-radius: 12px;
+  border-top-right-radius: 0px;
+  border-top-left-radius: 0px;
+  width: 200px;
+  margin-top: 13px;
+} */
+
+.menu-option:li {
+  text-align: left;
+  line-height: 30px;
+}
+
+.option {
+  padding-bottom: 5px
+}
+
+.option-button {
+  background-color: white;
+}
+ 
+.modal-links {
+  font-size: 1.25em;
+  padding-top: 5px;
+  padding-bottom: 5px;;
+}
+
+.one-modal {
+  padding: 5px;
+  font-weight: 700;
+}
+
+.one-modal:hover {
+  cursor: pointer;
+  text-shadow: #3371a17f .5px .5px 10px;
+}
 

@@ -38,44 +38,60 @@ function ProfileButton({ user }) {
     .then(history.push('/'));
   };
 
-  const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
+  const ulClassName = "menu-option" + (showMenu ? "" : " hidden");
 
   return (
-    <div className="profile-container">
-      {user?
-        (<Link className="link" id="create-spot-link-nav" to="/spots/new">Create a New Spot</Link>) : (<></>)}
-      <div onClick={openMenu}>
-        <i className="fas fa-user-circle" id="profile-icon"/>
-      </div>
-      <ul className={ulClassName} ref={ulRef}>
+    <>
+      <div className="profile-container">
         {user ? (
-          <>
-            <li>{user.username}</li>
-            <li>{user.firstName} {user.lastName}</li>
-            <li>{user.email}</li>
-            <li>
-              <NavLink to="/spots/current">Manage Spots</NavLink>
-            </li>
-            <li>
-              <button onClick={logout}>Log Out</button>
-            </li>
-          </>
+          <Link className="link" id="create-spot-link-nav" to="/spots/new">
+            Create a New Spot
+          </Link>
         ) : (
-          <>
-            <OpenModalMenuItem
-              itemText="Log In"
-              onItemClick={closeMenu}
-              modalComponent={<LoginFormModal />}
-            />
-            <OpenModalMenuItem
-              itemText="Sign Up"
-              onItemClick={closeMenu}
-              modalComponent={<SignupFormModal />}
-            />
-          </>
+          <></>
         )}
-      </ul>
-    </div>
+        <div onClick={openMenu}>
+          <i className="fas fa-user-circle" id="profile-icon" />
+        </div>
+      </div>
+      <div id="dropdown-menu-nav">
+        <ul className={ulClassName} ref={ulRef}>
+          {user ? (
+            <>
+              <li id="greeting" className="option"> Hello {user.firstName}!</li>
+              <li className="option">{user.username}</li>
+              <li className="option">
+                {user.firstName} {user.lastName}
+              </li>
+              <li className="option">{user.email}</li>
+              <li className="option">
+                <NavLink to="/spots/current">Manage Spots</NavLink>
+              </li>
+              <li className="option-button">
+                <button onClick={logout}>Log Out</button>
+              </li>
+            </>
+          ) : (
+            <div className="modal-links">
+              <div className="one-modal">
+              <OpenModalMenuItem
+                itemText="Log In"
+                onItemClick={closeMenu}
+                modalComponent={<LoginFormModal />}
+              />
+              </div>
+              <div className="one-modal">
+              <OpenModalMenuItem
+                itemText="Sign Up"
+                onItemClick={closeMenu}
+                modalComponent={<SignupFormModal />}
+              />
+              </div>
+            </div>
+          )}
+        </ul>
+      </div>
+    </>
   );
 }
 
